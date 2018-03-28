@@ -5,6 +5,7 @@
 ## Folder Structure
 
 ```bash
+.
 ├── lib
 │   ├── login.php
 │   ├── Message.php
@@ -155,8 +156,93 @@ The class files shouldn't need a large example, they will just be plain PHP clas
 ---
 
 ## Frontend
+### Index.php snippet:
+```html
+    <!-- Main body of the chat application -->
+    <div class="container full-height" ng-controller="ChatCtrl">
+        <div class="row full-height">
+            <div class="col-xs-12 full-height">
+                <div class="well full-height chat-window">
+                    <p class="text-center"> {{bodyMessage}} </p>
+                </div>
+            </div>
+        </div>
+    </div>
+```
+The class attributes (container, row, col-xs-12, and well) come from Bootstrap.  The first three are components of the grid system.  ng-controller specifies the piece of AngularJS code that will control this part of the page.  {{bodyMessage}} is a data-binding.  This means that this text will be replace by AngularJS with the value of $scope.bodyMessage in that controller.  We use this (among other things) to generate a dynamic page without PHP.  This also means that $scope.bodyMessage can be updated through AngularJS and the text on the page will update as well.
 
-TODO
+### app.js:
+```js
+'use strict';
+
+// Declare app level module which depends on components we will make
+angular.module('myApp', [
+    'ngAnimate',
+    'ui.bootstrap'
+])
+```
+This declares the AngularJS app and its dependencies.  This may or may not change if we have to do any configuration or add any dependcies.
+
+### app.chatCtrl.js:
+```js
+'use strict';
+
+// Retrieve app module
+var myApp = angular.module('myApp');
+
+myApp.controller('ChatCtrl', ['$scope', function ($scope) {
+    $scope.bodyMessage = "This is the main body of the application where the chats will be displayed.";
+}]);
+```
+This is the controller mentioned in the index.php snippet above.  It is attached to our AngularJS app, and is where all of the magic will happen.  Here, it only sets a variable value, but it will be changed to do something meaningful.  We will have many controllers for different functionality and parts of the page.  (We may use a service or services instead which will act sort of like classes that the controllers can use so we don't have to write the same code in multiple places.)
+
+### app.css
+```css
+@font-face {
+    font-family: 'Glyphicons Halflings';
+
+    src: url('../fonts/vendor/glyphicons-halflings-regular.eot');
+    src: url('../fonts/vendor/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/vendor/glyphicons-halflings-regular.woff2') format('woff2'), url('../fonts/vendor/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/vendor/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/vendor/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+body { padding-top: 50px; }
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+.full-height {
+    height: 100%;
+    min-height: 100%;
+}
+
+.chat-window {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0px;
+}
+
+.navbar-right {
+    margin-right:0px;
+}
+```
+This is where we set styles that are specific to our application.  Some things will be to fix/change Bootstrap like the top 2 rules, and others will just be styling that we want to apply on our page.
+
+---
+
+## Commit Organization
+```bash
+master
+└── develop
+    └── features
+        ├── index
+        ├── angular
+        ├── lib
+        └── api
+```
+ - All work will be done in the feature branch relevant to it. ie, if you're working on the PHP classes, commit your code to feature/lib.  You can upload code to these branches with a push.
+ - Once a feature is complete or in a stable state, you can initiate a pull request to the develop branch.  This will allow us all to review the code before accepting it to the develop branch.
+ - Finally, when everything is working together, we will do a pull request to master.
+ - This whole cycle can and likely will happen multiple times if we work on small sets of features before moving on.
 
 ---
 
