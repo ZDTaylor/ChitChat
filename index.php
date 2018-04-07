@@ -36,49 +36,23 @@
     <![endif]-->
 
     <!-- Navbar for the page -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-<div class="container">
-    
+    <nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavCtrl">
+        <div class="container">
 
-<!-- Chit Chat icon -->
-<div class="navbar-header">
-<a class="navbar-brand" href="#">
-<span class="glyphicon glyphicon-console" aria-hidden="true"></span>
-</a>
-</div>
-<!--Center align(Couldn't get this to work, I never could find a solution with CSS or html)-->
-<div class="nav1 navbar-nav1 navbar-center">
-<p class="navbar-text text-center"> Chit Chat </p>
-</div>
+            <!-- Chit Chat icon -->
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <span class="glyphicon glyphicon-console" aria-hidden="true"></span>
+                </a>
+            </div>
 
-<!--Right aligned Dropdown menu-->
-<div class="nav navbar-nav navbar-right">
-<div class="dropdown">
-<div class="btn-group btn-group-lg" role="group" aria-label="...">
-  <button class="btn btn-default dropdown-toggle" type="button" style="color: white" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    Login
-    <span class="caret"></span>
-  </button>
-<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-<li class="dropdown-header">Email</li>
-<div class="input-group">
-  <input type="text" class="form-control" placeholder="Enter email" aria-describedby="basic-addon1">
-</div>
-                
-<li class="dropdown-header">Password</li>
-<div class="input-group">
-  <input type="text" class="form-control" placeholder="Enter password" aria-describedby="basic-addon1">
-</div>
-    <li><button type="button" class="btn btn-default">Login</button></li>
-    <li><button type="button" class="btn btn-default">Register</button></li>
-<li role="separator" class="divider"></li>
-<li><a href="#" style="color: black">Forgot password?</a></li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-</nav>
+            <p class="navbar-text text-center"> {{headerMessage}} </p>
+
+            <!-- Sign in button -->
+            <button type="button" class="btn btn-default navbar-btn navbar-right">Sign in</button>
+        </div>
+    </nav>
+
     <!-- Main body of the chat application -->
     <div class="container full-height" ng-controller="ChatCtrl">
         <div class="row full-height">
