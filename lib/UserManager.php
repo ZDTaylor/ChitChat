@@ -1,39 +1,58 @@
 <?php
 
- 
-require_once "login.php";
 
+require_once "login.php";
 require_once "User.php";
 
 
 class UserManager {
 
-
-
-
-
-public $database;
+private $database;
+private $salt;
 
 
 //Default constructor for UserManager class
 function __UserManager(){
-$conn = mysqli_connect($email, $passwd, $name, $admin, $banned, $suspended, $deleted, $resetUrl);
-if ($conn->connect_error) die($conn->connect_error);
-$query = "SELECT * FROM dcsp03";
-$this -> database = $conn->query($query);
+    $this->database = mysqli_connect($db_login["hn"], $db_login["un"], $db_login["pw"], $db_login["db"]);
+    if ($this->database->connect_error) die($this->database->connect_error);
+
+    $this->salt = '***REMOVED***';
 }
 
 
 //Register function - checks to see if eamail and password are already stored in the database
 function register($email, $password){
-if($email != $_POST["email"] ){
-$sql = "INSERT INTO dcsp03 (email, passwd)
-VALUES ($email, $password)";
-return true;
-}
-else{
-return false;
-}
+
+    // Hash the user's password before inserting it into the table.  If it returns false, return false.
+    if (!$hashed_password = password_hash($password, PASSWORD_BCRYPT, ["salt" => $this->salt])) {
+        return false;
+    }
+
+    // Prepare the insert statement.  '?' represents a variable that we will bind later.
+    // If it returns false, return false.
+    if (!$stmt = $this->database->prepare("INSERT INTO Users(email, passwd) VALUES (?, ?);")) {
+        return false;
+    }
+
+    // Bind parameters to the statement for every '?' in the prepared statement.  Must specify type
+    // In this case both are strings, so you can use 'ss' or 's s'
+    // Type codes can be found here: https://secure.php.net/manual/en/mysqli-stmt.bind-param.php
+    // If it returns false, return false.
+    if (!$stmt->bind_param('ss', $email, $hashed_password)) {
+        return false;
+    }
+
+    // Execute the statement.  This will just run it.
+    // If it was successful, return true.  Otherwise return false.
+    // ALWAYS close the statement before returning.
+    if ($stmt->execute()) {
+        $stmt->close();
+        return true;
+    }
+    else {
+        $stmt->close();
+        return false;
+    }
 }
 
 
