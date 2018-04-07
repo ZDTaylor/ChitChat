@@ -24,3 +24,18 @@ body { padding-top: 50px; }
 .navbar-right {
     margin-right:0px;
 }
+
+.dropdown {list-style: none; background: black; padding: 1.5px; display: inline-block;}
+.dropdown .nav-link {color:#fff; text-decoration: none;}
+.dropdown .dropdown-menu a{color: #000; text-decoration: none;}
+.dropdown .btn {background: gray; color:#fff;}
+.dropdown .btn:hover {background: black; color: whitesmoke;}
+.dropdown .btn:active {background: gray; color:gray;}
+.dropdown .btn:focus {background: gray; color:gray;}
+.dropdown-menu .dropdown-item {display: inline-block; width: 100%; padding: 10px 5px;}
+.container .dropdown .dropdown-menu a:hover
+{
+  color: #fff;
+  background-color: #b91773;
+  border-color: #fff;
+}
