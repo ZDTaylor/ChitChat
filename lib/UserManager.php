@@ -69,6 +69,12 @@ function logOut(){
 
 //Delete function - deletes the users account from the database
 function delete($userID){
+
+//check variables for table names
+if (!$del = "DELETE FROM db WHERE un = $userID"){
+return false;
+}
+return true;
 }
 
 
@@ -84,16 +90,33 @@ function resetPasswordReset($key, $newPassword){
 
 //Suspend function - suspends a user account if the logged in user is admin
 function suspend($currentUser, $userToSuspend){
+if($currentUser == "admin"){
+
+}
 }
 
 
 //Ban function - bans a user's account if the logged in user is admin
 function ban($currentUser, $userToBan){
+if($currentUser == "admin"){
+
+}
 }
 
 
 //Generatedisplayname function - randomly generates a display name for the user
 function generateDisplayName(){
+$displayName = "";
+
+//max and min values for rand function
+$min = 0;
+$max = 10000;
+
+//generate a random number and convert it into a string for concatenation
+$randomNumber = rand($min, $max);
+$strNumber = "$randomNumber";
+$displayName = "user" + $strNumber;
+return $displayName;
 }
 
 }
