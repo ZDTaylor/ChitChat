@@ -4,20 +4,23 @@
     header('Content-type: application/json');
 
     $userManager = new UserManager();
-    $response = false;
-    // Check for variables that got posted, and use userManager to try to login.
+    $response = ["success" => false];
 
-    if (isset($_POST["username"]) && isset($_POST["password"])) {
-        $username = sanitize_input($_POST["username"]);
-        $password = sanitize_input($_POST["password"]);
+    $data = json_decode(file_get_contents("php://input"), true);
+
+    if (isset($data["email"]) && isset($data["password"])) {
+        $email = sanitize_input($data["email"]);
+        $password = sanitize_input($data["password"]);
 
         // $response should be a user object or false if there was an issue
-        $user = $userManager->login($username, $password);
+        //$user = $userManager->login($email, $password);
 
-        if ($user != false) {
+
+        if ($password == "testpass") {
             session_start();
-            $_SESSION["user"] = $user;
-            $response = true;
+            $_SESSION["user"] = $email;
+            $response["success"] = true;
+            $response["user"] = "Zack Taylor";
         }
 
     }
