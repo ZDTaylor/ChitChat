@@ -28,7 +28,7 @@
                         vm.user = userservice.user;
                         vm.email = "";
                         vm.passwd = "";
-                        vm.dropdownMessage = vm.user;
+                        vm.dropdownMessage = vm.user.email;
                         vm.dropdownIsOpen = false;
                     })
                 .catch(

@@ -56,6 +56,8 @@ class UserManager {
 
     //Login function - checks entered email and password against known entries in the database
     function logIn($email, $password){
+        $userID;
+        $userEmail;
 
         // Hash the user's password before inserting it into the table.  If it returns false, return false.
         if (!$hashed_password = password_hash($password, PASSWORD_BCRYPT, ["salt" => $this->salt])) {
@@ -64,7 +66,7 @@ class UserManager {
 
         // Prepare the insert statement.  '?' represents a variable that we will bind later.
         // If it returns false, return false.
-        if (!$stmt = $this->database->prepare("SELECT userID FROM Users WHERE email = ? and passwd = ?;")) {
+        if (!$stmt = $this->database->prepare("SELECT userID, email FROM Users WHERE email = ? and passwd = ?;")) {
             return false;
         }
 
@@ -80,10 +82,12 @@ class UserManager {
         // If it was successful, return true.  Otherwise return false.
         // ALWAYS close the statement before returning.
         if ($stmt->execute()) {
-            $stmt->bind_result($userID);
+            $stmt->bind_result($userID, $userEmail);
             $stmt->fetch();
             $user = new User();
             $user->userID = $userID;
+            $user->email = $userEmail;
+            $user->name = generateDisplayName($userID);
             return $user;
         }
         else {
@@ -137,17 +141,8 @@ class UserManager {
 
 
     //Generatedisplayname function - randomly generates a display name for the user
-    function generateDisplayName(){
-        $displayName = "";
-
-        //max and min values for rand function
-        $min = 0;
-        $max = 10000;
-
-        //generate a random number and convert it into a string for concatenation
-        $randomNumber = rand($min, $max);
-        $strNumber = "$randomNumber";
-        $displayName = "user" + $strNumber;
+    function generateDisplayName($id){
+        $displayName = "Anonymous#" . sprintf("%08d", $id);
         return $displayName;
     }
 }
