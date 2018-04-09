@@ -6,22 +6,46 @@ require_once "Message.php";
 
 class Messenger {
     private $database;
-    private $salt;
-    //Default constructor for UserManager class
-    function __UserManager(){
+    //Default constructor for Messenger class
+    function __Messenger() {
         $this->database = mysqli_connect($db_login["hn"], $db_login["un"], $db_login["pw"], $db_login["db"]);
-        if ($this->database->connect_error){
-            die($this->database->connect_error)
+        if ($this->database->connect_error) {
+            die($this->database->connect_error);
         }
-        $this->salt = '***REMOVED***';
     }
 
     //Load function - The load function will load a set of messages from the database and return an array of Message objects.
-    function load(){
-        $query = mysql_query("SELECT content FROM Messages");
-        $message_array = array();
-        while ($row = mysql_fetch_assoc(query)){
-            $message_array[] = $row;
+    function load() {
+        $query = "SELECT messageID, userID, content FROM Messages";
+        $messageID;
+        $userID;
+        $content;
+        $messages = [];
+
+        // Prepare the insert statement.  '?' represents a variable that we will bind later.
+        // If it returns false, return false.
+        if (!$stmt = $this->database->prepare($query)) {
+            return false;
+        }
+
+        // Execute the statement.  This will just run it.
+        // If it was successful, return true.  Otherwise return false.
+        // ALWAYS close the statement before returning.
+        if ($stmt->execute()) {
+            $stmt->bind_result($messageID, $userID, $content);
+            while ($stmt->fetch()) {
+                $messages[] = [
+                    "messageID" => $messageID,
+                    "userID" => $userID,
+                    "content" => $content
+                ];
+            }
+            $stmt->close();
+            return $messages;
+        }
+        else {
+            $stmt->close();
+            return false;
         }
     }
 }
