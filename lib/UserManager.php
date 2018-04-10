@@ -141,8 +141,6 @@ class UserManager {
     //Resetpasswordsendemail - creates a unique string and stores it in the database - sends the user an email
     function resetPasswordSendEmail($email){
     }
-
-
     //Resetpasswordreset - takes the key created in resetpasswordsendemail and the user's new password to update password
     function resetPasswordReset($key, $newPassword){
     }
