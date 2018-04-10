@@ -15,8 +15,6 @@
     // login.php needs to be accessed as a POST only
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-            //$user = $userManager->login($email, $password);
-            if ($password == "testpass") {
         // Use this instead of $_POST array.  This is how the front end will transmit data
         // $data will be an associative array, just like $_POST would have been
         $data = json_decode(file_get_contents("php://input"), true);

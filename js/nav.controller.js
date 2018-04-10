@@ -14,6 +14,7 @@
         vm.passwd = vm.passwd || "";
         vm.dropdownIsOpen = false;
         vm.login = login;
+        vm.register = register;
         vm.logout = logout;
 
         ////////////////
@@ -37,6 +38,21 @@
                         console.log("user after: " + userservice.user);
                     });
         }
+
+        function register() {
+            userservice.register(vm.email, vm.passwd)
+                .then(
+                    function (response) { // HTTP Success
+                        console.log("HTTP suucess");
+                        console.log("Register success: ", response.success);
+                    })
+                .catch(
+                    function (response) { // HTTP Failure
+                        console.log("HTTP failure");
+                        console.log("user after: " + userservice.user);
+                    });
+        }
+
         function logout() {
             userservice.user = null;
             vm.user = null;

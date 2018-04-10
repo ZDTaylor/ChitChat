@@ -70,7 +70,7 @@
                                 <input type="password" class="form-control" placeholder="Enter password" aria-describedby="basic-addon1" ng-model="nav.passwd">
                             </div>
                             <li><button type="button" class="btn btn-default" ng-click="nav.login()">Login</button></li>
-                            <li><button type="button" class="btn btn-default">Register</button></li>
+                            <li><button type="button" class="btn btn-default" ng-click="nav.register()">Register</button></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#" style="color: black">Forgot password?</a></li>
                         </ul>

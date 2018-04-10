@@ -1,8 +1,8 @@
 <?php
 
 
-require_once "login.php";
-require_once "User.php";
+require_once "lib/login.php";
+require_once "lib/User.php";
 
 
 class UserManager {
@@ -11,18 +11,19 @@ class UserManager {
     private $salt;
 
     //Default constructor for UserManager class
-    function __UserManager(){
-        $this->database = mysqli_connect($db_login["hn"], $db_login["un"], $db_login["pw"], $db_login["db"]);
+    function __construct() {
+        global $db_login;
+        $this->database = new mysqli($db_login["hn"], $db_login["un"], $db_login["pw"], $db_login["db"]);
         if ($this->database->connect_error) die($this->database->connect_error);
 
         $this->salt = '***REMOVED***';
     }
 
     //Register function - checks to see if eamail and password are already stored in the database
-    function register($email, $password){
+    function register($email, $password) {
 
         // Hash the user's password before inserting it into the table.  If it returns false, return false.
-        if (!$hashed_password = password_hash($password, PASSWORD_BCRYPT, ["salt" => $this->salt])) {
+        if (!$hashed_password = crypt($password, $this->salt)) {
             return false;
         }
 
@@ -55,12 +56,12 @@ class UserManager {
 
 
     //Login function - checks entered email and password against known entries in the database
-    function logIn($email, $password){
+    function logIn($email, $password) {
         $userID;
         $userEmail;
 
         // Hash the user's password before inserting it into the table.  If it returns false, return false.
-        if (!$hashed_password = password_hash($password, PASSWORD_BCRYPT, ["salt" => $this->salt])) {
+        if (!$hashed_password = crypt($password, $this->salt)) {
             return false;
         }
 
@@ -88,6 +89,7 @@ class UserManager {
             $user->userID = $userID;
             $user->email = $userEmail;
             $user->name = generateDisplayName($userID);
+            $stmt->close();
             return $user;
         }
         else {
@@ -125,18 +127,14 @@ class UserManager {
 
 
     //Suspend function - suspends a user account if the logged in user is admin
-    function suspend($currentUser, $userToSuspend){
-        if($currentUser == "admin"){
+    function suspend($userToSuspend){
 
-        }
     }
 
 
     //Ban function - bans a user's account if the logged in user is admin
-    function ban($currentUser, $userToBan){
-        if($currentUser == "admin"){
+    function ban($userToBan){
 
-        }
     }
 
 

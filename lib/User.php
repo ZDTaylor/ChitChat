@@ -3,7 +3,7 @@
 class User {
     public $userID, $displayName, $isAdmin, $email, $suspended, $banned;
 
-    public function __User() {
+    public function __construct() {
         $userID = 0;
         $displayName = "";
         $isAdmin = false;
