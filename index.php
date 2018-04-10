@@ -93,6 +93,15 @@
             </div>
         </div>
     </div>
+    
+    <nav class="navbar navbar-inverse navbar-fixed-bottom">
+        <form class="navbar-form navbar-left" role="post message">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Post message">
+            </div>
+            <button type="submit" class="btn btn-default">Send</button>
+        </form>
+    </nav>
 
 
 
