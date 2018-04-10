@@ -1,7 +1,5 @@
 <?php
 
-require_once "User.php";
-
 //create the Message class
 
 class Message {
@@ -9,7 +7,7 @@ class Message {
     public $messageID, $content, $poster, $likes, $dislikes, $mentions, $liked, $disliked;
 
 
-    public function __Message(){
+    public function __construct() {
         $this-> messageID = 0;
         $this-> content = "";
         $this-> poster = 0;

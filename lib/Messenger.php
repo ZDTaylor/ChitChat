@@ -1,14 +1,15 @@
 <?php
 
-require_once "login.php";
-require_once "User.php";
-require_once "Message.php";
+require_once "lib/login.php";
+require_once "lib/User.php";
+require_once "lib/Message.php";
 
 class Messenger {
     private $database;
     //Default constructor for Messenger class
-    function __Messenger() {
-        $this->database = mysqli_connect($db_login["hn"], $db_login["un"], $db_login["pw"], $db_login["db"]);
+    function __construct() {
+        global $db_login;
+        $this->database = new mysqli($db_login["hn"], $db_login["un"], $db_login["pw"], $db_login["db"]);
         if ($this->database->connect_error) {
             die($this->database->connect_error);
         }
