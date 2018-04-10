@@ -88,7 +88,7 @@ class UserManager {
             $user = new User();
             $user->userID = $userID;
             $user->email = $userEmail;
-            $user->name = generateDisplayName($userID);
+            $user->displayName = $this->generateDisplayName($userID);
             $stmt->close();
             return $user;
         }
