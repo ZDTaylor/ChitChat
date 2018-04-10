@@ -107,13 +107,35 @@ class UserManager {
 
     //Delete function - deletes the users account from the database
     function delete($userID){
+		
 
-        //check variables for table names
-        if (!$del = "DELETE FROM db WHERE un = $userID"){
+        // Prepare the insert statement.  '?' represents a variable that we will bind later.
+        // If it returns false, return false.
+        if (!$stmt = $this->database->prepare("Update Users SET email = null and passwd = null WHERE userID = ?;")) {
             return false;
         }
-        return true;
+
+        // Bind parameters to the statement for every '?' in the prepared statement.  Must specify type
+        // In this case both are strings, so you can use 'ss' or 's s'
+        // Type codes can be found here: https://secure.php.net/manual/en/mysqli-stmt.bind-param.php
+        // If it returns false, return false.
+        if (!$stmt->bind_param('s', $userID)) {
+            return false;
+        }
+
+        // Execute the statement.  This will just run it.
+        // If it was successful, return true.  Otherwise return false.
+        // ALWAYS close the statement before returning.
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        }
+        else {
+            $stmt->close();
+            return false;
+        }
     }
+
 
 
     //Resetpasswordsendemail - creates a unique string and stores it in the database - sends the user an email
