@@ -4,25 +4,43 @@
     header('Content-type: application/json');
 
     $userManager = new UserManager();
-    $response = false;
-    // Check for variables that got posted, and use userManager to try to login.
 
-    if (isset($_POST["username"]) && isset($_POST["password"])) {
-        $username = sanitize_input($_POST["username"]);
-        $password = sanitize_input($_POST["password"]);
+    // response must be an array.  We will declare all values at fields to return at the beginning and set them to
+    // defaults to be returned if there is a failure.  Later, we will update them when there is a success.
+    $response = [
+        "success" => false,
+        "user" => null
+    ];
 
-        // $response should be a user object or false if there was an issue
-        $user = $userManager->login($username, $password);
+    // login.php needs to be accessed as a POST only
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        if ($user != false) {
-            session_start();
-            $_SESSION["user"] = $user;
-            $response = true;
+        // Use this instead of $_POST array.  This is how the front end will transmit data
+        // $data will be an associative array, just like $_POST would have been
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        // We can use !empty() instead of isset() to check for existance and for non-falsy values
+        if (!empty($data["email"]) && !empty($data["password"])) {
+
+            // Always sanitize any input we get
+            $email = sanitize_input($data["email"]);
+            $password = sanitize_input($data["password"]);
+
+            // Call the relevant class method
+            $user = $userManager->login($email, $password);
+
+            // If the method returned successfully, start a session and set the user variable
+            // Also update the $response with the user object and the success status
+            if ($user != false) {
+                session_start();
+                $_SESSION["user"] = $user;
+                $response["user"] = $user;
+                $response["success"] = true;
+            }
         }
-
     }
 
-    // Use json_encode() to return whatever we decide needs to be returned
+    // Use json_encode() to return $response
     // This will ensure that the js on the client side will get data it can understand
     echo json_encode($response);
 ?>

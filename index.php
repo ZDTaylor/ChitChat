@@ -52,27 +52,31 @@
             </div>
 
             <!--Right aligned Dropdown menu-->
-            <div class="nav navbar-nav navbar-right">
+            <div class="nav navbar-nav navbar-right" ng-controller="NavController as nav">
                 <div class="dropdown">
-                    <div class="btn-group btn-group-lg" role="group" aria-label="..." uib-dropdown is-open="status.isopen">
+                    <div class="btn-group btn-group-lg" role="group" aria-label="..." uib-dropdown auto-close="outsideClick" is-open="nav.dropdownIsOpen">
                         <button class="btn btn-default dropdown-toggle" type="button" style="color: white" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" uib-dropdown-toggle ng-disabled="disabled">
-                            Login
+                            {{nav.dropdownMessage}}
                             <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" uib-dropdown-menu>
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" uib-dropdown-menu ng-if="nav.user === null">
                             <li class="dropdown-header">Email</li>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Enter email" aria-describedby="basic-addon1">
+                                <input type="text" class="form-control" placeholder="Enter email" aria-describedby="basic-addon1" ng-model="nav.email">
                             </div>
 
                             <li class="dropdown-header">Password</li>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Enter password" aria-describedby="basic-addon1">
+                                <input type="password" class="form-control" placeholder="Enter password" aria-describedby="basic-addon1" ng-model="nav.passwd">
                             </div>
-                            <li><button type="button" class="btn btn-default">Login</button></li>
-                            <li><button type="button" class="btn btn-default">Register</button></li>
+                            <li><button type="button" class="btn btn-default" ng-click="nav.login()">Login</button></li>
+                            <li><button type="button" class="btn btn-default" ng-click="nav.register()">Register</button></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="#" style="color: black">Forgot password?</a></li>
+                        </ul>
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" uib-dropdown-menu ng-if="nav.user !== null">
+                            <li><button type="button" class="btn btn-default" ng-click="nav.logout()">Logout</button></li>
+                            <li><button type="button" class="btn btn-default">Delete Account</button></li>
                         </ul>
                     </div>
                 </div>
@@ -119,6 +123,6 @@
     <script src="js/app.module.js"></script>
     <script src="js/constants.js"></script>
 
-    <script src="js/test.controller.js"></script>
+    <script src="js/nav.controller.js"></script>
 </body>
 </html>
