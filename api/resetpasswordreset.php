@@ -1,6 +1,7 @@
 <?php
-    require_once "../lib/UserManager.php";
-    require_once "../lib/sanitize_input.php";
+    set_include_path(getcwd() . '/..');
+    require_once "lib/UserManager.php";
+    require_once "lib/sanitize_input.php";
     header('Content-type: application/json');
 
     $userManager = new UserManager();

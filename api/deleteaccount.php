@@ -1,6 +1,7 @@
 <?php
-    require_once "../lib/UserManager.php";
-    require_once "../lib/sanitize_input.php";
+    set_include_path(getcwd() . '/..');
+    require_once "lib/UserManager.php";
+    require_once "lib/sanitize_input.php";
     header('Content-type: application/json');
 
     $userManager = new UserManager();
@@ -12,11 +13,11 @@
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
         session_start();
-		
+
 		// attempt to delete current user account, delete their session (if not handled in class),
         // and update $response["success"] as needed
 		if(isset($_SESSION['user'])){
-			$delete = userManager-> delete($_SESSION['user']-> userID);
+			$delete = $userManager->delete($_SESSION['user']->userID);
 			if ($delete != false) {
                 $response["success"] = true;
 				unset($_SESSION['user']);
@@ -24,7 +25,7 @@
 				session_destroy();
 			}
 		}
-        
+
     }
 
     // Use json_encode() to return $response
