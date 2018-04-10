@@ -14,6 +14,12 @@
 
         // load messages and store them in $response["messages"]
         // if load is successful, update $response["success"] to be true
+        $messages = $Messenger->load();
+
+        if ($messages != false) {
+            $response["messages"] = $messages;
+            $response["success"] = true;
+        }
 
     }
 
