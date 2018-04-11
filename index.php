@@ -95,13 +95,16 @@
     </div>
     
     <nav class="navbar navbar-inverse navbar-fixed-bottom">
-        <form class="navbar-form navbar-left" role="post message">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="Post message">
+        <form class="navbar-form">
+            <div class="form-group" style="display:inline;">
+              <div class="input-group" style="display:table;">
+                <input class="form-control" name="Post message" placeholder="Type message here..." autocomplete="off" autofocus="autofocus" type="text">
+                  <span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-send"></span></span>
+              </div>
             </div>
-            <button type="submit" class="btn btn-default">Send</button>
         </form>
     </nav>
+    
 
 
 
