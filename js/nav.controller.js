@@ -9,7 +9,7 @@
     function NavController(userservice) {
         var vm = this;
         vm.user = userservice.user;
-        vm.dropdownMessage = vm.user || "Login";
+        vm.dropdownMessage = vm.user ? vm.user.email : "Login";
         vm.email = vm.email || "";
         vm.passwd = vm.passwd || "";
         vm.dropdownIsOpen = false;
