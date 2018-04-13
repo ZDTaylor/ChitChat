@@ -55,7 +55,7 @@
             <div class="nav navbar-nav navbar-right" ng-controller="NavController as nav">
                 <div class="dropdown">
                     <div class="btn-group btn-group-lg" role="group" aria-label="..." uib-dropdown auto-close="outsideClick" is-open="nav.dropdownIsOpen">
-                        <button class="btn btn-default dropdown-toggle" type="button" style="color: white" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" uib-dropdown-toggle ng-disabled="disabled">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" uib-dropdown-toggle>
                             {{nav.dropdownMessage}}
                             <span class="caret"></span>
                         </button>
@@ -72,7 +72,7 @@
                             <li><button type="button" class="btn btn-default" ng-click="nav.login()">Login</button></li>
                             <li><button type="button" class="btn btn-default" ng-click="nav.register()">Register</button></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#" style="color: black">Forgot password?</a></li>
+                            <li><a href="#" class="forgot-password">Forgot password?</a></li>
                         </ul>
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" uib-dropdown-menu ng-if="nav.user !== null">
                             <li><button type="button" class="btn btn-default" ng-click="nav.logout()">Logout</button></li>
@@ -83,6 +83,7 @@
             </div>
         </div>
     </nav>
+
     <!-- Main body of the chat application -->
     <div class="container full-height">
         <div class="row full-height">
@@ -93,18 +94,18 @@
             </div>
         </div>
     </div>
-    
-    <nav class="navbar navbar-inverse navbar-fixed-bottom">
+
+    <nav class="navbar navbar-inverse navbar-fixed-bottom cc-messagebox">
         <form class="navbar-form">
-            <div class="form-group" style="display:inline;">
-              <div class="input-group" style="display:table;">
+            <div class="form-group">
+              <div class="input-group">
                 <input class="form-control" name="Post message" placeholder="Type message here..." autocomplete="off" autofocus="autofocus" type="text">
-                  <span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-send"></span></span>
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-send"></span></span>
               </div>
             </div>
         </form>
     </nav>
-    
+
 
 
 
