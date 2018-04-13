@@ -49,6 +49,33 @@ class Messenger {
             return false;
         }
     }
+
+    function post($message){
+        $query = "INSERT INTO Messages(content, userID) VALUES(?, ?)";
+
+        if(!$stmt = this->database->prepare($query)){
+            return false;
+        }
+
+        if (!$stmt->bind_param('si', $content, $userID)) {
+            return false;
+        }
+
+
+        if ($stmt->execute()){
+            $stmt->close();
+        //For mentions
+        //$query = "INSERT INTO Mentions (userID, messageID) VALUES(?,?)";
+        
+
+            return true;
+        }
+        else{
+            $stmt->close();
+            return false;
+        }
+
+    }
 }
 
 ?>

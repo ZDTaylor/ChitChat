@@ -1,6 +1,7 @@
 <?php
-    require_once "../lib/Messenger.php";
-    require_once "../lib/sanitize_input.php";
+    set_include_path(getcwd() . '/..');
+    require_once "lib/Messenger.php";
+    require_once "lib/sanitize_input.php";
     header('Content-type: application/json');
 
     $Messenger = new Messenger();
@@ -17,7 +18,7 @@
 
             // Create a message object, and update the required fields with the same fields from $data["message"]
             // attempt to post the message and update $response["success"] accordingly
-
+            $Messenger->post($message);
         }
 
     }
