@@ -5,16 +5,16 @@
         .module('app.users')
         .factory('userservice', userservice);
 
-    userservice.inject = ['$resource', 'apiUrl'];
-    function userservice($resource, apiUrl) {
+    userservice.inject = ['$resource', 'apiUrl', 'User'];
+    function userservice($resource, apiUrl, User) {
         var service = {
-            user: null,
+            user: new User(),
             register: register,
             login: login,
             logout: logout,
             resetpasswordemail: resetpasswordemail,
             resetpasswordreset: resetpasswordreset,
-            deleteaccount: deleteaccount,
+            deleteAccount: deleteAccount,
             ban: ban,
             suspend: suspend
         };
@@ -35,7 +35,8 @@
                 .then(
                     function (response) {
                         if (response.success == true) {
-                            service.user = response.user;
+                            service.user = new User(response.user);
+                            console.log(service.user);
                         }
                         return response;
                     });
@@ -48,7 +49,7 @@
                 .then(
                     function (response) {
                         if (response.success == true) {
-                            service.user = null;
+                            service.user = new User();
                         }
                         return response;
                     });
@@ -66,14 +67,14 @@
             return ResetPasswordReset.save({ key: key, newpassword: newpassword }).$promise;
         }
 
-        function deleteaccount() {
+        function deleteAccount() {
             var DeleteAccount = $resource(apiUrl + 'deleteaccount.php');
 
             return DeleteAccount.get().$promise
                 .then(
                     function (response) {
                         if (response.success == true) {
-                            service.user = null;
+                            service.user = new User();
                         }
                         return response;
                     });

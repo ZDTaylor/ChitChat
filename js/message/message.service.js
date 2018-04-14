@@ -8,7 +8,7 @@
     messageservice.inject = ['$resource', 'apiUrl'];
     function messageservice($resource, apiUrl) {
         var service = {
-            messages: null,
+            messages: [],
             load: load,
             post: post,
             edit: edit,

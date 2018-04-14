@@ -96,6 +96,6 @@ ChitChat styling
     display: table;
 }
 
-.cc-messagebox .input-group-addon {
+.cc-messagebox .input-group-btn {
     width: 1% !important;
 }

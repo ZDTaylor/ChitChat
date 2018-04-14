@@ -59,7 +59,7 @@
                             {{nav.dropdownMessage}}
                             <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" uib-dropdown-menu ng-if="nav.user === null">
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" uib-dropdown-menu ng-if="nav.user.userId === null">
                             <li class="dropdown-header">Email</li>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Enter email" aria-describedby="basic-addon1" ng-model="nav.email">
@@ -74,9 +74,9 @@
                             <li role="separator" class="divider"></li>
                             <li><a href="#" class="forgot-password">Forgot password?</a></li>
                         </ul>
-                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" uib-dropdown-menu ng-if="nav.user !== null">
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" uib-dropdown-menu ng-if="nav.user.userId !== null">
                             <li><button type="button" class="btn btn-default" ng-click="nav.logout()">Logout</button></li>
-                            <li><button type="button" class="btn btn-default">Delete Account</button></li>
+                            <li><button type="button" class="btn btn-default" ng-click="nav.deleteAccount()">Delete Account</button></li>
                         </ul>
                     </div>
                 </div>
@@ -95,13 +95,15 @@
         </div>
     </div>
 
-    <nav class="navbar navbar-inverse navbar-fixed-bottom cc-messagebox">
-        <form class="navbar-form">
+    <nav class="navbar navbar-inverse navbar-fixed-bottom cc-messagebox" ng-controller="MessageBoxController as messageBox">
+        <form class="navbar-form" ng-submit="messageBox.postMessage()">
             <div class="form-group">
-              <div class="input-group">
-                <input class="form-control" name="Post message" placeholder="Type message here..." autocomplete="off" autofocus="autofocus" type="text">
-                  <span class="input-group-addon"><span class="glyphicon glyphicon-send"></span></span>
-              </div>
+                <div class="input-group">
+                    <input class="form-control" name="Post message" placeholder="Type message here..." autocomplete="off" autofocus="autofocus" type="textarea" ng-model="messageBox.message.content">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-send"></span></button>
+                    </span>
+                </div>
             </div>
         </form>
     </nav>
@@ -127,15 +129,18 @@
          app.module.js must be loaded after other app modules.
          app modules must be loaded before any services that depend on them.
     -->
-    <script src="js/users.module.js"></script>
-    <script src="js/user.service.js"></script>
+    <script src="js/user/users.module.js"></script>
+    <script src="js/user/user.factory.js"></script>
+    <script src="js/user/user.service.js"></script>
 
-    <script src="js/messages.module.js"></script>
-    <script src="js/message.service.js"></script>
+    <script src="js/message/messages.module.js"></script>
+    <script src="js/message/message.factory.js"></script>
+    <script src="js/message/message.service.js"></script>
 
     <script src="js/app.module.js"></script>
     <script src="js/constants.js"></script>
 
     <script src="js/nav.controller.js"></script>
+    <script src="js/messageBox.controller.js"></script>
 </body>
 </html>
