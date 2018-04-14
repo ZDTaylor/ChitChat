@@ -24,14 +24,18 @@
 
             // Always sanitize any input we get
             $email = sanitize_input($data["email"]);
-            $password = sanitize_input($data["password"]);
+            $email = filter_var($email, FILTER_VALIDATE_EMAIL);
 
-            // Call the relevant class method
-            $registration = $userManager->register($email, $password);
+            if ($email !== false) {
+                $password = sanitize_input($data["password"]);
 
-            // If the method returned successfully, update the success status
-            if ($registration != false) {
-                $response["success"] = true;
+                // Call the relevant class method
+                $registration = $userManager->register($email, $password);
+
+                // If the method returned successfully, update the success status
+                if ($registration != false) {
+                    $response["success"] = true;
+                }
             }
         }
     }
