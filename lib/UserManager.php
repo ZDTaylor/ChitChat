@@ -148,7 +148,7 @@ class UserManager {
 
 
     //Suspend function - suspends a user account if the logged in user is admin
-    function suspend($userToSuspend){
+    function suspend($userToSuspend, $datetime){
 
     }
 

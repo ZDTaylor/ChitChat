@@ -50,10 +50,10 @@ class Messenger {
         }
     }
 
-    function post($message){
+    function post($message) {
         $query = "INSERT INTO Messages(content, userID) VALUES(?, ?)";
 
-        if(!$stmt = this->database->prepare($query)){
+        if(!$stmt = $this->database->prepare($query)) {
             return false;
         }
 
@@ -62,11 +62,11 @@ class Messenger {
         }
 
 
-        if ($stmt->execute()){
+        if ($stmt->execute()) {
             $stmt->close();
         //For mentions
         //$query = "INSERT INTO Mentions (userID, messageID) VALUES(?,?)";
-        
+
 
             return true;
         }
@@ -75,6 +75,22 @@ class Messenger {
             return false;
         }
 
+    }
+
+    function edit($message) {
+        // take in a message with an id and userID, and update the content of the message IF the userID matches the one in the DB
+    }
+
+    function delete($messageID) {
+        // delete the message with messageID.  User checking will be done in the api file
+    }
+
+    function like($messageID, $userID) {
+        // I will change the database to make this much simpler to do
+    }
+
+    function dislike($messageID, $userID) {
+        // I will change the database to make this much simpler to do
     }
 }
 
