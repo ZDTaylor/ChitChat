@@ -68,6 +68,7 @@ class UserManager {
         // Prepare the insert statement.  '?' represents a variable that we will bind later.
         // If it returns false, return false.
         if (!$stmt = $this->database->prepare("SELECT userID, email FROM Users WHERE email = ? and passwd = ?;")) {
+            $stmt->close();
             return false;
         }
 
@@ -76,6 +77,7 @@ class UserManager {
         // Type codes can be found here: https://secure.php.net/manual/en/mysqli-stmt.bind-param.php
         // If it returns false, return false.
         if (!$stmt->bind_param('ss', $email, $hashed_password)) {
+            $stmt->close();
             return false;
         }
 
@@ -83,14 +85,19 @@ class UserManager {
         // If it was successful, return true.  Otherwise return false.
         // ALWAYS close the statement before returning.
         if ($stmt->execute()) {
-            $stmt->bind_result($userID, $userEmail);
-            $stmt->fetch();
-            $user = new User();
-            $user->userID = $userID;
-            $user->email = $userEmail;
-            $user->displayName = $this->generateDisplayName($userID);
+            $stmt->store_result();
+            if ($stmt->num_rows == 1) {
+                $stmt->bind_result($userID, $userEmail);
+                $stmt->fetch();
+                $user = new User();
+                $user->userID = $userID;
+                $user->email = $userEmail;
+                $user->displayName = $this->generateDisplayName($userID);
+                $stmt->close();
+                return $user;
+            }
             $stmt->close();
-            return $user;
+            return false;
         }
         else {
             $stmt->close();
@@ -99,19 +106,13 @@ class UserManager {
     }
 
 
-
-    //Logout function - Logs the user out of the page
-    function logOut(){
-    }
-
-
     //Delete function - deletes the users account from the database
     function delete($userID){
-		
+
 
         // Prepare the insert statement.  '?' represents a variable that we will bind later.
         // If it returns false, return false.
-        if (!$stmt = $this->database->prepare("Update Users SET email = null and passwd = null WHERE userID = ?;")) {
+        if (!$stmt = $this->database->prepare("Update Users SET email = null, passwd = null WHERE userID = ?;")) {
             return false;
         }
 
