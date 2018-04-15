@@ -87,9 +87,19 @@ class Messenger {
         if ($stmt->execute()){
             $stmt->close();
         //For mentions
-        //$query = "INSERT INTO Mentions (userID, messageID) VALUES(?,?)";
+        $query = "INSERT INTO Mentions (userID, messageID) VALUES(?,?)";
         
+        if(!$stmt = this->database->prepare($query)){
+            return false;
+        }
 
+        if (!$stmt->bind_param('ii', $userID, $messageID)) {
+            return false;
+        }
+
+        if ($stmt->execute()){
+            $stmt->close();
+        }
             return true;
         }
         else{
