@@ -1,22 +1,15 @@
 <?php
 
 class User {
-    public $userID;
-    public $displayName;
-    public $isAdmin;
-    public $email;
-    public $password;
-    public $suspended;
-    public $banned;
+    public $userID, $displayName, $isAdmin, $email, $suspended, $banned;
 
-    public function User(){
-        $this -> userID = 0;
-        $this -> displayName = "";        
-        $this -> isAdmin = false;
-        $this -> email = "";
-        $this -> password = "";
-        $this -> suspended = "";
-        $this -> banned = false;
+    public function __construct() {
+        $this->userID = 0;
+        $this->displayName = "";
+        $this->isAdmin = false;
+        $this->email = "";
+        $this->suspended = '1970-01-01 00:00:00';
+        $this->banned = false;
     }
 }
 

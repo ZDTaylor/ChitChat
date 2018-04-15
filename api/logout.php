@@ -1,6 +1,7 @@
 <?php
-    require_once "../lib/UserManager.php";
-    require_once "../lib/sanitize_input.php";
+    set_include_path(getcwd() . '/..');
+    require_once "lib/UserManager.php";
+    require_once "lib/sanitize_input.php";
     header('Content-type: application/json');
 
     $userManager = new UserManager();
@@ -11,10 +12,17 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
-        $data = json_decode(file_get_contents("php://input"), true);
-
         // attempt to log out of current user, delete their session (if not handled in class),
         // and update $response["success"] as needed
+        if(isset($_SESSION['user'])){
+            unset($_SESSION['user']);
+            setcookie(session_name(), "", time()-42000);
+            session_destroy();
+            $response["success"] = true;
+        }
+        else {
+            $response["success"] = true;
+        }
     }
 
     // Use json_encode() to return $response
