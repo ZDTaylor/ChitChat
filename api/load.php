@@ -10,12 +10,20 @@
         "messages" => []
     ];
 
+    session_start();
+
+    if (!empty($_SESSION["user"])) {
+        $userID = $_SESSION["user"]->userID;
+    }
+    else {
+        $userID = 0;
+    }
 
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
         // load messages and store them in $response["messages"]
         // if load is successful, update $response["success"] to be true
-        $messages = $Messenger->load();
+        $messages = $Messenger->load($userID);
 
         if ($messages != false) {
             $response["messages"] = $messages;

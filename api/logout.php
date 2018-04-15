@@ -15,11 +15,13 @@
         // attempt to log out of current user, delete their session (if not handled in class),
         // and update $response["success"] as needed
         if(isset($_SESSION['user'])){
-            $response["success"] = true;
             unset($_SESSION['user']);
             setcookie(session_name(), "", time()-42000);
             session_destroy();
-
+            $response["success"] = true;
+        }
+        else {
+            $response["success"] = true;
         }
     }
 
