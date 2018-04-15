@@ -19,6 +19,10 @@ body {
 ChitChat styling
 */
 
+html {
+    overflow-x: hidden;
+}
+
 /* Main window styling */
 .full-height {
     height: 100%;
@@ -88,6 +92,10 @@ ChitChat styling
 }
 
 /* Messagebox styling */
+.cc-messagebox {
+    max-height: 25%;
+}
+
 .cc-messagebox .form-group {
     display: inline;
 }
@@ -98,4 +106,8 @@ ChitChat styling
 
 .cc-messagebox .input-group-btn {
     width: 1% !important;
+}
+
+.cc-messagebox textarea.form-control {
+    height: 32px;
 }

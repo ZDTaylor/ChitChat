@@ -95,11 +95,13 @@
         </div>
     </div>
 
-    <nav class="navbar navbar-inverse navbar-fixed-bottom cc-messagebox" ng-controller="MessageBoxController as messageBox">
+    <nav id="cc-messageBox" class="navbar navbar-inverse navbar-fixed-bottom cc-messagebox" ng-controller="MessageBoxController as messageBox">
         <form class="navbar-form" ng-submit="messageBox.postMessage()">
             <div class="form-group">
                 <div class="input-group">
-                    <input class="form-control" name="Post message" placeholder="Type message here..." autocomplete="off" autofocus="autofocus" type="textarea" ng-model="messageBox.message.content">
+                    <!--<input class="form-control" name="Post message" placeholder="Type message here..." autocomplete="off" autofocus="autofocus" type="text" ng-model="messageBox.message.content">-->
+                    <textarea class="form-control" placeholder="Type message here..." autocomplete="off" autofocus="autofocus"
+                    ng-model="messageBox.message.content" auto-grow ng-maxlength="10000" ng-keydown="messageBox.shiftEnter($event)"></textarea>
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-send"></span></button>
                     </span>
@@ -112,6 +114,7 @@
 
 
     <!-- Comment the following before final upload to reduce file size -->
+    <script src="js/vendor/jQuery.min.js"></script>
     <script src="js/vendor/angular.js"></script>
     <script src="js/vendor/angular-resource.js"></script>
     <script src="js/vendor/angular-animate.js"></script>
@@ -119,6 +122,7 @@
 
     <!-- Unomment the following before final upload to reduce file size -->
     <!--
+    <script src="js/vendor/jQuery.min.js"></script>
     <script src="js/vendor/angular.min.js"></script>
     <script src="js/vendor/angular-resource.js"></script>
     <script src="js/vendor/angular-animate.min.js"></script>
