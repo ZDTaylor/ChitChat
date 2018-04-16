@@ -73,6 +73,7 @@ class Messenger {
     }
 
     function post($message){
+        $messageID;
         $error = false;
         $userID = $message->poster;
         $content = $message->content;
@@ -130,7 +131,7 @@ class Messenger {
         if (!$error) {
             if($this->database->commit()) {
                 $this->database->autocommit(TRUE);
-                return true;
+                return $messageID;
             }
             else {
                 $this->database->rollback();

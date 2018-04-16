@@ -1,9 +1,11 @@
 <?php
     set_include_path(getcwd() . '/..');
     require_once "lib/Messenger.php";
+    require_once "lib/UserManager.php";
     require_once "lib/sanitize_input.php";
     header('Content-type: application/json');
 
+    $userManager = new UserManager();
     $Messenger = new Messenger();
     $response = [
         "success" => false
