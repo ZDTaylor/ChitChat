@@ -17,20 +17,25 @@
             unset($_SESSION["user"]);
         }
     }
+	if($_SESSION["user"]->isAdmin == true){
+		
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+		if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        $data = json_decode(file_get_contents("php://input"), true);
+			$data = json_decode(file_get_contents("php://input"), true);
 
-        if (!empty($data["userid"]) && !empty($data["datetime"])) {
+			if (!empty($data["userid"]) && !empty($data["datetime"])) {
 
-            // pass userid and datetime to usermanager suspend and
-            // update $response["success"] accordingly
-
-            // $data["userid"] is the user to suspend, current user should be in session variable
-
-        }
-    }
+				// pass userid and datetime to usermanager suspend and
+				// update $response["success"] accordingly
+				$suspend = $userManager->suspend($userid, $datetime)
+				// $data["userid"] is the user to suspend, current user should be in session variable
+				if($suspend ==true){
+				$response["success"] = true;
+				}
+			}
+		}
+	}
 
     // Use json_encode() to return $response
     // This will ensure that the js on the client side will get data it can understand
