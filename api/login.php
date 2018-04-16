@@ -20,7 +20,6 @@
         $_SESSION["user"] = $userManager->checkBannedSuspended($_SESSION["user"]);
         $response["user"] = $_SESSION["user"];
         $response["success"] = true;
-        $response["session"] = true;
     }
     // login.php needs to be accessed as a POST only
     else if ($_SERVER["REQUEST_METHOD"] == "POST") {
