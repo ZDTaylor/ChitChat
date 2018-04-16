@@ -9,7 +9,7 @@
         function MessageConstructor(args = {}) {
             var message = this;
             message = {
-                id: args.id || null,
+                messageId: args.messageId || null,
                 poster: args.poster || null,
                 content: args.content || "",
                 mentions: args.mentions || [],

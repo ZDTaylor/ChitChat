@@ -9,7 +9,8 @@
     MessageBoxController.inject = ['$rootScope', '$scope', 'userservice', 'messageservice', 'Message'];
     function MessageBoxController($rootScope, $scope, userservice, messageservice, Message) {
         var vm = this;
-        vm.message = new Message({ poster: userservice.user.id });
+        vm.message = new Message({ poster: userservice.user.userId });
+        vm.messageContent = "";
         vm.error = false;
         vm.postMessage = postMessage;
         vm.mentionUser = mentionUser;
@@ -19,15 +20,17 @@
         ////////////////
 
         function postMessage() {
-            vm.message.poster = userservice.user.id;
+            vm.message.poster = userservice.user.userId;
+            vm.message.content = vm.messageContent;
             messageservice.post(vm.message)
                 .then(
                     function (response) {
                         if (response.success === true) {
                             vm.error = false;
-                            vm.message.id = response.id;
+                            vm.messageContent = "";
+                            vm.message.messageId = response.messageId;
                             messageservice.messages.push(vm.message);
-                            vm.message = new Message(poster = userservice.user.id);
+                            vm.message = new Message(poster = userservice.user.userId);
                             messageservice.load();
                         }
                     })

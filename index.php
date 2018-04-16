@@ -101,7 +101,7 @@
                 <div class="input-group">
                     <!--<input class="form-control" name="Post message" placeholder="Type message here..." autocomplete="off" autofocus="autofocus" type="text" ng-model="messageBox.message.content">-->
                     <textarea class="form-control" placeholder="Type message here..." autocomplete="off" autofocus="autofocus"
-                    ng-model="messageBox.message.content" auto-grow ng-maxlength="10000" ng-keydown="messageBox.shiftEnter($event)"></textarea>
+                    ng-model="messageBox.messageContent" auto-grow ng-maxlength="10000" ng-keydown="messageBox.shiftEnter($event)"></textarea>
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-send"></span></button>
                     </span>
