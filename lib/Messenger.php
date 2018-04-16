@@ -73,6 +73,7 @@ class Messenger {
     }
 
     function post($message){
+        $messageID;
         $error = false;
         $userID = $message->poster;
         $content = $message->content;
@@ -130,7 +131,7 @@ class Messenger {
         if (!$error) {
             if($this->database->commit()) {
                 $this->database->autocommit(TRUE);
-                return true;
+                return $messageID;
             }
             else {
                 $this->database->rollback();
@@ -149,8 +150,13 @@ class Messenger {
         // take in a message with an id and userID, and update the content of the message IF the userID matches the one in the DB
     }
 
-    function delete($messageID) {
+    function delete($messageID, $userID) {
         // delete the message with messageID.  User checking will be done in the api file
+
+        //Do during lab
+        $query = "DELETE FROM Messages WHERE $userID = userID OR $userID = "; //How to identify Admin account?
+        
+        
     }
 
     function like($messageID, $userID) {
