@@ -148,13 +148,59 @@ class UserManager {
 
 
     //Suspend function - suspends a user account if the logged in user is admin
-    function suspend($userToSuspend){
+    function suspend($userToSuspend, $suspendTime){
+		if (!$stmt = $this->database->prepare("Update Users SET suspend = ? WHERE userID = ?;")) {
+            return false;
+        }
+
+        // Bind parameters to the statement for every '?' in the prepared statement.  Must specify type
+        // In this case both are strings, so you can use 'ss' or 's s'
+        // Type codes can be found here: https://secure.php.net/manual/en/mysqli-stmt.bind-param.php
+        // If it returns false, return false.
+        if (!$stmt->bind_param('i s', $suspendTime, $userToSuspend)) {
+            return false;
+        }
+
+        // Execute the statement.  This will just run it.
+        // If it was successful, return true.  Otherwise return false.
+        // ALWAYS close the statement before returning.
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        }
+        else {
+            $stmt->close();
+            return false;
+        }
 
     }
 
 
     //Ban function - bans a user's account if the logged in user is admin
     function ban($userToBan){
+		if (!$stmt = $this->database->prepare("Update Users SET ban = 1 WHERE userID = ?;")) {
+            return false;
+        }
+
+        // Bind parameters to the statement for every '?' in the prepared statement.  Must specify type
+        // In this case both are strings, so you can use 'ss' or 's s'
+        // Type codes can be found here: https://secure.php.net/manual/en/mysqli-stmt.bind-param.php
+        // If it returns false, return false.
+        if (!$stmt->bind_param('s', $userToBan)) {
+            return false;
+        }
+
+        // Execute the statement.  This will just run it.
+        // If it was successful, return true.  Otherwise return false.
+        // ALWAYS close the statement before returning.
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        }
+        else {
+            $stmt->close();
+            return false;
+        }
 
     }
 
