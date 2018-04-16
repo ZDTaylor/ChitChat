@@ -55,11 +55,11 @@
             <div class="nav navbar-nav navbar-right" ng-controller="NavController as nav">
                 <div class="dropdown">
                     <div class="btn-group btn-group-lg" role="group" aria-label="..." uib-dropdown auto-close="outsideClick" is-open="nav.dropdownIsOpen">
-                        <button class="btn btn-default dropdown-toggle" type="button" style="color: white" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" uib-dropdown-toggle ng-disabled="disabled">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" uib-dropdown-toggle>
                             {{nav.dropdownMessage}}
                             <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" uib-dropdown-menu ng-if="nav.user === null">
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" uib-dropdown-menu ng-if="nav.user.userId === null">
                             <li class="dropdown-header">Email</li>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Enter email" aria-describedby="basic-addon1" ng-model="nav.email">
@@ -72,17 +72,18 @@
                             <li><button type="button" class="btn btn-default" ng-click="nav.login()">Login</button></li>
                             <li><button type="button" class="btn btn-default" ng-click="nav.register()">Register</button></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#" style="color: black">Forgot password?</a></li>
+                            <li><a href="#" class="forgot-password">Forgot password?</a></li>
                         </ul>
-                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" uib-dropdown-menu ng-if="nav.user !== null">
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" uib-dropdown-menu ng-if="nav.user.userId !== null">
                             <li><button type="button" class="btn btn-default" ng-click="nav.logout()">Logout</button></li>
-                            <li><button type="button" class="btn btn-default">Delete Account</button></li>
+                            <li><button type="button" class="btn btn-default" ng-click="nav.deleteAccount()">Delete Account</button></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
+
     <!-- Main body of the chat application -->
     <div class="container full-height">
         <div class="row full-height">
@@ -94,9 +95,26 @@
         </div>
     </div>
 
+    <nav id="cc-messageBox" class="navbar navbar-inverse navbar-fixed-bottom cc-messagebox" ng-controller="MessageBoxController as messageBox">
+        <form class="navbar-form" ng-submit="messageBox.postMessage()">
+            <div class="form-group">
+                <div class="input-group">
+                    <!--<input class="form-control" name="Post message" placeholder="Type message here..." autocomplete="off" autofocus="autofocus" type="text" ng-model="messageBox.message.content">-->
+                    <textarea class="form-control" placeholder="Type message here..." autocomplete="off" autofocus="autofocus"
+                    ng-model="messageBox.messageContent" auto-grow ng-maxlength="10000" ng-keydown="messageBox.shiftEnter($event)"></textarea>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-send"></span></button>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </nav>
+
+
 
 
     <!-- Comment the following before final upload to reduce file size -->
+    <script src="js/vendor/jQuery.min.js"></script>
     <script src="js/vendor/angular.js"></script>
     <script src="js/vendor/angular-resource.js"></script>
     <script src="js/vendor/angular-animate.js"></script>
@@ -104,6 +122,7 @@
 
     <!-- Unomment the following before final upload to reduce file size -->
     <!--
+    <script src="js/vendor/jQuery.min.js"></script>
     <script src="js/vendor/angular.min.js"></script>
     <script src="js/vendor/angular-resource.js"></script>
     <script src="js/vendor/angular-animate.min.js"></script>
@@ -114,15 +133,18 @@
          app.module.js must be loaded after other app modules.
          app modules must be loaded before any services that depend on them.
     -->
-    <script src="js/users.module.js"></script>
-    <script src="js/user.service.js"></script>
+    <script src="js/user/users.module.js"></script>
+    <script src="js/user/user.factory.js"></script>
+    <script src="js/user/user.service.js"></script>
 
-    <script src="js/messages.module.js"></script>
-    <script src="js/message.service.js"></script>
+    <script src="js/message/messages.module.js"></script>
+    <script src="js/message/message.factory.js"></script>
+    <script src="js/message/message.service.js"></script>
 
     <script src="js/app.module.js"></script>
     <script src="js/constants.js"></script>
 
     <script src="js/nav.controller.js"></script>
+    <script src="js/messageBox.controller.js"></script>
 </body>
 </html>
