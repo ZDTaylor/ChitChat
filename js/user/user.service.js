@@ -51,6 +51,7 @@
                         if (response.success == true) {
                             service.user = new User();
                         }
+                        console.log(response);
                         return response;
                     });
         }

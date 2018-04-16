@@ -19,6 +19,7 @@
         vm.logout = logout;
         vm.deleteAccount = deleteAccount;
 
+        vm.login();
         ////////////////
 
         function register() {
