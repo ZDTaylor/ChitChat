@@ -9,6 +9,14 @@
         "success" => false
     ];
 
+    session_start();
+
+    if(isset($_SESSION["user"])) {
+        $_SESSION["user"] = $userManager->checkBannedSuspended($_SESSION["user"]);
+        if ($_SESSION["user"]->banned || new DateTime() < $_SESSION["user"]->suspended) {
+            unset($_SESSION["user"]);
+        }
+    }
 
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
