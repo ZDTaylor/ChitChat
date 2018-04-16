@@ -4,18 +4,16 @@
 
 class Message {
 
-    public $messageID, $content, $poster, $likes, $dislikes, $mentions, $liked, $disliked;
+    public $messageID, $content, $poster, $net_likes, $mentions, $reaction;
 
 
     public function __construct() {
-        $this-> messageID = 0;
-        $this-> content = "";
-        $this-> poster = 0;
-        $this-> likes = 0;
-        $this-> dislikes = 0;
-        $this-> mentions = [];
-        $this-> liked = false;
-        $this-> disliked = false;
+        $this->messageID = 0;
+        $this->content = "";
+        $this->poster = 0;
+        $this->net_likes = 0;
+        $this->mentions = [];
+        $this->reaction = 0;
     }
 }
 

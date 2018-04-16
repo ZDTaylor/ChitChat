@@ -1,6 +1,7 @@
 <?php
-    require_once "../lib/UserManager.php";
-    require_once "../lib/sanitize_input.php";
+    set_include_path(getcwd() . '/..');
+    require_once "lib/UserManager.php";
+    require_once "lib/sanitize_input.php";
     header('Content-type: application/json');
 
     $userManager = new UserManager();
@@ -8,6 +9,14 @@
         "success" => false
     ];
 
+    session_start();
+
+    if(isset($_SESSION["user"])) {
+        $_SESSION["user"] = $userManager->checkBannedSuspended($_SESSION["user"]);
+        if ($_SESSION["user"]->banned || new DateTime() < $_SESSION["user"]->suspended) {
+            unset($_SESSION["user"]);
+        }
+    }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
