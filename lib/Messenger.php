@@ -75,7 +75,7 @@ class Messenger {
     function post($message){
         $query = "INSERT INTO Messages(content, userID) VALUES(?, ?)";
 
-        if(!$stmt = this->database->prepare($query)){
+        if(!$stmt = $this->database->prepare($query)){
             return false;
         }
 
@@ -88,8 +88,8 @@ class Messenger {
             $stmt->close();
         //For mentions
         $query = "INSERT INTO Mentions (userID, messageID) VALUES(?,?)";
-        
-        if(!$stmt = this->database->prepare($query)){
+
+        if(!$stmt = $this->database->prepare($query)){
             return false;
         }
 
