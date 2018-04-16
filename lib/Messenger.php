@@ -72,41 +72,77 @@ class Messenger {
         }
     }
 
-    function post($message) {
-        $query = "INSERT INTO Messages(content, userID) VALUES(?, ?)";
+    function post($message){
+        $error = false;
+        $userID = $message->poster;
+        $content = $message->content;
+        $mentions = $message->mentions;
+
+        // Begin Transaction
+        $this->database->autocommit(FALSE);
+
+        // Insert message into messages database
+        $query = "INSERT INTO Messages(content, userID) VALUES(?, ?);";
 
         if(!$stmt = $this->database->prepare($query)){
-            return false;
+            $error = true;
         }
 
         if (!$stmt->bind_param('si', $content, $userID)) {
-            return false;
-        }
-
-
-        if ($stmt->execute()) {
-            $stmt->close();
-        //For mentions
-        $query = "INSERT INTO Mentions (userID, messageID) VALUES(?,?)";
-
-        if(!$stmt = $this->database->prepare($query)){
-            return false;
-        }
-
-        if (!$stmt->bind_param('ii', $userID, $messageID)) {
-            return false;
+            $error = true;
         }
 
         if ($stmt->execute()){
+            $messageID = $stmt->insert_id;
             $stmt->close();
+
+            if ($messageID) {
+
+                if (count($mentions) != 0) {
+                    //Insert mentions into mentions database
+                    $query = "INSERT INTO Mentions (userID, messageID) VALUES(?,?);";
+
+                    if(!$stmt = $this->database->prepare($query)){
+                        $error = true;
+                    }
+
+                    if (!$stmt->bind_param('ii', $userID, $messageID)) {
+                        $error = true;
+                    }
+
+                    foreach ($mentions as $userID) {
+                        if (!$stmt->execute()) {
+                            $error = true;
+                        }
+                    }
+                    $stmt->close();
+                }
+            }
+            else {
+                $error = true;
+            }
         }
-            return true;
-        }
-        else{
-            $stmt->close();
-            return false;
+        else {
+            $error = true;
         }
 
+        // Commit if no error, rollback otherwise
+        if (!$error) {
+            if($this->database->commit()) {
+                $this->database->autocommit(TRUE);
+                return true;
+            }
+            else {
+                $this->database->rollback();
+                $this->database->autocommit(TRUE);
+                return false;
+            }
+        }
+        else {
+            $this->database->rollback();
+            $this->database->autocommit(TRUE);
+            return false;
+        }
     }
 
     function edit($message) {
