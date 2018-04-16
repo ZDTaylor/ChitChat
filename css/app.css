@@ -1,3 +1,6 @@
+/*
+Bootstrap overrides/fixes
+*/
 @font-face {
     font-family: 'Glyphicons Halflings';
 
@@ -5,10 +8,22 @@
     src: url('../fonts/vendor/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/vendor/glyphicons-halflings-regular.woff2') format('woff2'), url('../fonts/vendor/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/vendor/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/vendor/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 
-body { padding-top: 50px; }
+body {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
 
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 
+/*
+ChitChat styling
+*/
+
+html {
+    overflow-x: hidden;
+}
+
+/* Main window styling */
 .full-height {
     height: 100%;
     min-height: 100%;
@@ -21,21 +36,78 @@ body { padding-top: 50px; }
     margin-bottom: 0px;
 }
 
+/* Top navbar styling */
 .navbar-right {
     margin-right:0px;
 }
 
-.dropdown {list-style: none; background: black; padding: 1.5px; display: inline-block;}
-.dropdown .nav-link {color:#fff; text-decoration: none;}
-.dropdown .dropdown-menu a{color: #000; text-decoration: none;}
-.dropdown .btn {background: gray; color:#fff;}
-.dropdown .btn:hover {background: black; color: whitesmoke;}
-.dropdown .btn:active {background: gray; color:gray;}
-.dropdown .btn:focus {background: gray; color:gray;}
-.dropdown-menu .dropdown-item {display: inline-block; width: 100%; padding: 10px 5px;}
-.container .dropdown .dropdown-menu a:hover
-{
+.dropdown {
+    list-style: none;
+    background: black;
+    padding: 1.5px;
+    display: inline-block;
+}
+
+.dropdown .nav-link {
+    color:#fff;
+    text-decoration: none;
+}
+
+.dropdown .btn {
+    background: gray;
+    color:#fff;
+
+}
+
+.dropdown .btn:hover {
+    background: black;
+    color: whitesmoke;
+}
+
+.dropdown .btn:active {
+    background: gray;
+    color:gray;
+
+}
+.dropdown .btn:focus {
+    background: gray;
+    color:gray;
+}
+
+.dropdown-item {
+    display: inline-block;
+    width: 100%;
+    padding: 10px 5px;
+}
+
+.dropdown-menu a {
+    color: #000;
+    text-decoration: none;
+}
+
+.dropdown-menu a:hover {
     color: #fff;
     background-color: #b91773;
     border-color: #fff;
+}
+
+/* Messagebox styling */
+.cc-messagebox {
+    max-height: 25%;
+}
+
+.cc-messagebox .form-group {
+    display: inline;
+}
+
+.cc-messagebox .input-group {
+    display: table;
+}
+
+.cc-messagebox .input-group-btn {
+    width: 1% !important;
+}
+
+.cc-messagebox textarea.form-control {
+    height: 32px;
 }
