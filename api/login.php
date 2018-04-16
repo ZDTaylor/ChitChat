@@ -13,8 +13,17 @@
         "user" => null
     ];
 
+    session_start();
+
+    // If the user is already logged in, just pass the info back
+    if(isset($_SESSION["user"])) {
+        $_SESSION["user"] = $userManager->checkBannedSuspended($_SESSION["user"]);
+        $response["user"] = $_SESSION["user"];
+        $response["success"] = true;
+        $response["session"] = true;
+    }
     // login.php needs to be accessed as a POST only
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    else if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Use this instead of $_POST array.  This is how the front end will transmit data
         // $data will be an associative array, just like $_POST would have been
@@ -38,6 +47,12 @@
                 $response["user"] = $user;
                 $response["success"] = true;
             }
+        }
+    }
+
+    if (isset($_SESSION["user"])) {
+        if ($_SESSION["user"]->banned || new DateTime() < $_SESSION["user"]->suspended) {
+            unset($_SESSION["user"]);
         }
     }
 
