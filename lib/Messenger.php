@@ -69,7 +69,7 @@ class Messenger {
         else {
             $stmt->close();
             return false;
-        }
+        }                                                                                                                                               
     }
 
     function post($message){
@@ -150,7 +150,7 @@ class Messenger {
         // take in a message with an id and userID, and update the content of the message IF the userID matches the one in the DB
     }
 
-    function delete($messageID, $userID) {
+    function delete($messageID, $User) {
         // delete the message with messageID.  User checking will be done in the api file
         if $User->isAdmin{
             $query = "DELETE FROM Messages WHERE messageID = ?";
@@ -175,7 +175,7 @@ class Messenger {
             if (!$stmt = $this->database->prepare($query)) {
                 return false;
             }
-            if (!$stmt->bind_param('ii', $messageID, $userID)) {
+            if (!$stmt->bind_param('ii', $messageID, $User->userID)) {
                 return false;
             }
             if ($stmt->execute()){
