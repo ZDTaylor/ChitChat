@@ -90,6 +90,46 @@
             <div class="col-xs-12 full-height">
                 <div class="well full-height chat-window">
                     <p class="text-center"></p>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                            <div class="dropdown">
+                                <div class="btn-group btn-group-xs" role="group" aria-label="...">
+                                  <button class="btn btn-default dropdown-toggle" type="button" style="color: white" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    {{username}}
+                                    <span class="caret"></span>
+                                  </button>
+                                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                                    <li><button type="button" class="btn btn-default">Mention</button></li>
+                                    <li><button type="button" class="btn btn-default">Quote</button></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><button type="button" class="btn btn-default">Ban</button></li>
+                                    <li><button type="button" class="btn btn-default">Suspend</button></li>
+                                </ul>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-xs-10">
+                                            <pre>{{Message area}}</pre>
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <span class="glyphicon glyphicon-chevron-up"></span><br>
+                                            {{votes}}<br>
+                                            <span class="glyphicon glyphicon-chevron-down"></span><br>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                        </div>
+                            <div class="panel-footer">
+                                <div class="btn-group" role="group" aria-label="...">
+                                  <button type="button" class="btn btn-default">Edit</button>
+                                  <button type="button" class="btn btn-default">Delete</button>
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>
