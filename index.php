@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="css/app.css">
 
 </head>
-<body class="full-height">
+<body>
 
     <!--[if lt IE 7]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -85,19 +85,19 @@
     </nav>
 
     <!-- Main body of the chat application -->
-    <div class="container full-height">
-        <div class="row full-height">
-            <div class="col-xs-12 full-height">
-                <div class="well full-height">
-                    <div class="panel panel-default">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="well" ng-controller="MessageScrollController as messageScroll">
+                    <div class="panel panel-default" ng-repeat="message in messageScroll.messages | orderBy: message.messageId">
                         <div class="panel-heading">
                             <div class="dropdown">
                                 <div class="btn-group btn-group-xs" role="group" aria-label="..." uib-dropdown auto-close="outsideClick">
-                                    <button class="btn btn-default dropdown-toggle" type="button" style="color: white" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" uib-dropdown-toggle>
-                                        {username}
-                                        <span class="caret"></span>
+                                    <button class="btn btn-default dropdown-toggle" type="button" style="color: white" id="messageDropdownMenu{{$index}}"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" uib-dropdown-toggle>
+                                        {{messageScroll.displayName(message.poster)}}<span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2" uib-dropdown-menu>
+                                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="messageDropdownMenu{{$index}}" uib-dropdown-menu>
                                         <li><button type="button" class="btn btn-default">Mention</button></li>
                                         <li><button type="button" class="btn btn-default">Quote</button></li>
                                         <li role="separator" class="divider"></li>
@@ -110,12 +110,12 @@
                         <div class="panel-body">
                             <div class="row row-eq-height">
                                 <div class="col-xs-11 cc-message-content">
-                                    <pre>{Message_area}</pre>
+                                    <pre ng-bind="message.content"></pre>
                                 </div>
                                 <div class="col-xs-1 cc-message-votes">
                                     <span class="glyphicon glyphicon-chevron-up"></span>
                                     <br>
-                                    {votes}
+                                    <span ng-bind="message.net_likes"></span>
                                     <br>
                                     <span class="glyphicon glyphicon-chevron-down"></span>
                                 </div>
@@ -262,6 +262,7 @@
     <script src="js/constants.js"></script>
 
     <script src="js/nav.controller.js"></script>
+    <script src="js/messageScroll.controller.js"></script>
     <script src="js/messageBox.controller.js"></script>
 </body>
 </html>

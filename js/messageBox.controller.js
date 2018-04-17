@@ -62,11 +62,13 @@
             require: 'ngModel',
             link: function (scope, element, attr, ngModel) {
                 var update = function () {
+                    var messageBox = angular.element(document.querySelector("#cc-messageBox"));
+                    messageBox.parent().css("padding-bottom", "32px");
+
                     element.css("height", "32px");
                     var height = element[0].scrollHeight;
-                    var messageBox = angular.element(document.querySelector("#cc-messageBox"));
 
-                    var parentHeight = parseFloat(messageBox.parent().css("height"));
+                    var parentHeight = parseFloat(angular.element(window).height());
                     var messageBoxPercent = parseFloat(messageBox.css("max-height")) / 100.0;
 
                     var maxHeight = Math.floor((parentHeight * messageBoxPercent) - 16);
@@ -74,9 +76,11 @@
                     if (height > 0) {
                         if (height < maxHeight) {
                             element.css("height", height + "px");
+                            messageBox.parent().css("padding-bottom", height + "px");
                         }
                         else {
                             element.css("height", maxHeight + "px");
+                            messageBox.parent().css("padding-bottom", maxHeight + "px");
                         }
                     }
                 };
