@@ -150,7 +150,86 @@
         </form>
     </nav>
 
+    <!-- Gen Error Modal -->
+<div id="GenError" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Error!</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    </div>
+    </div>
+      
+    <!-- Confirm Modal -->
+<div id="Confirm" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Are you sure?</h4>
+      </div>
+      <div class="modal-body">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Confirm</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+    </div>
+    </div>
+    
+    <!-- Reset Password Modal -->
+<div id="ResetPassword" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Reset Password</h4>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Enter new password" aria-describedby="basic-addon1">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Confirm</button>
+      </div>
+    </div>
+    </div>
+    </div>
+    
+    <!-- Suspend Modal -->
+<div id="Suspend" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">How long will user be suspended?</h4>
+      </div>
+      <div class="modal-body">
+        <form action="/action_page.php">
+            Date:
+                  <input type="date" name="suspend">
+                  <input type="submit">
+          </form>
+        </div>
+    </div>
+    </div>
+    </div>
 
 
     <!-- Comment the following before final upload to reduce file size -->
