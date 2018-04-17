@@ -207,7 +207,7 @@ class UserManager {
         // In this case both are strings, so you can use 'ss' or 's s'
         // Type codes can be found here: https://secure.php.net/manual/en/mysqli-stmt.bind-param.php
         // If it returns false, return false.
-        if (!$stmt->bind_param('s s', $suspendTime, $userToSuspend)) {
+        if (!$stmt->bind_param('ss', $suspendTime, $userToSuspend)) {
             return false;
         }
 
