@@ -18,17 +18,23 @@
         }
     }
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	if($_SESSION["user"]->isAdmin == true){
+		
+		if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        $data = json_decode(file_get_contents("php://input"), true);
+			$data = json_decode(file_get_contents("php://input"), true);
 
-        if (!empty($data["userid"])) {
+			if (!empty($data["userid"])) {
 
-            // pass userid to usermanager ban and
-            // update $response["success"] accordingly
-
+				// pass userid to usermanager ban and
+				// update $response["success"] accordingly
+					$ban = $userManager->suspend($userid)
+					// $data["userid"] is the user to suspend, current user should be in session variable
+					if($suspend ==true){
+					$response["success"] = true;
+					}
             // $data["userid"] is the user to ban, current user should be in session variable
-
+			}
         }
     }
 
