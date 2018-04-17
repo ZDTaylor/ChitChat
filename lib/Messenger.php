@@ -27,7 +27,8 @@ class Messenger {
         FROM Messages m
         LEFT JOIN Mentions n ON (m.messageID = n.messageID)
         LEFT JOIN Reactions r ON (m.messageID = r.messageID)
-        GROUP BY m.messageID";
+        GROUP BY m.messageID
+        ORDER BY m.messageID";
 
         $messageID;
         $poster;
@@ -57,7 +58,7 @@ class Messenger {
                 $message = new Message();
                 $message->messageID = $messageID;
                 $message->content = $content;
-                $message->poster = $userID;
+                $message->poster = $poster;
                 $message->net_likes = !is_null($net_likes) ? intval($net_likes) : 0;
                 $message->mentions = !is_null($mentions) ? array_map('intval', explode(",", $mentions)) : [];
                 $message->reaction = !is_null($reaction) ? intval($reaction) : 0;
