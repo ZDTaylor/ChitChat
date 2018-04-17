@@ -29,13 +29,6 @@ html {
     min-height: 100%;
 }
 
-.chat-window {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0px;
-}
-
 /* Top navbar styling */
 .navbar-right {
     margin-right:0px;
@@ -91,6 +84,10 @@ html {
     border-color: #fff;
 }
 
+.dropdown-menu button {
+    width: 100%;
+}
+
 /* Messagebox styling */
 .cc-messagebox {
     max-height: 25%;
@@ -110,4 +107,31 @@ html {
 
 .cc-messagebox textarea.form-control {
     height: 32px;
+}
+
+/* Message styling */
+.row.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+  flex-wrap: wrap;
+}
+
+.row.row-eq-height > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
+
+.cc-message-content {
+    justify-content: center;
+}
+
+.cc-message-content > pre {
+    margin: 0px;
+}
+
+.cc-message-votes {
+    justify-content: center;
+    text-align: center;
 }
