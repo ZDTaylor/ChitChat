@@ -152,11 +152,41 @@ class Messenger {
 
     function delete($messageID, $userID) {
         // delete the message with messageID.  User checking will be done in the api file
+        if $User->isAdmin{
+            $query = "DELETE FROM Messages WHERE messageID = ?";
+            if (!$stmt = $this->database->prepare($query)) {
+                return false;
+            }
+            if (!$stmt->bind_param('i', $messageID)) {
+                return false;
+            }
 
-        //Do during lab
-        $query = "DELETE FROM Messages WHERE $userID = userID OR $userID = "; //How to identify Admin account?
-        
-        
+            if ($stmt->execute()){
+                $stmt->close();
+                return true;                
+            }
+            else{
+                $stmt->close();
+                return false;
+            }
+        }
+        else{
+            $query = "DELETE FROM Messages WHERE messageID = ? AND userID = ?";
+            if (!$stmt = $this->database->prepare($query)) {
+                return false;
+            }
+            if (!$stmt->bind_param('ii', $messageID, $userID)) {
+                return false;
+            }
+            if ($stmt->execute()){
+                $stmt->close();
+                return true;                
+            }
+            else{
+                $stmt->close();
+                return false;
+            }
+        }
     }
 
     function like($messageID, $userID) {

@@ -25,11 +25,12 @@
         $data = json_decode(file_get_contents("php://input"), true);
 
         if (!empty($data["messageid"])) {
-
             // attempt to remove the message with $data["messageid"] and update $response["success"] accordingly
-
+            $removal = $Messenger->delete($messageID, $userID);
+            if($removal != false){
+                $response["success"] = true;
+            }
         }
-
     }
 
     echo json_encode($response);
