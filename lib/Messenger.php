@@ -146,8 +146,23 @@ class Messenger {
         }
     }
 
-    function edit($message) {
+    function edit($message, $User) {
         // take in a message with an id and userID, and update the content of the message IF the userID matches the one in the DB
+        query = "UPDATE Messages SET content = ? WHERE userID = ?";
+        if (!$stmt = $this->database->prepare($query)) {
+            return false;
+        }
+        if (!$stmt->bind_param('si', $message, $User->userID)) {
+            return false;
+        }
+        if ($stmt->execute()){
+            $stmt->close();
+            return true;                
+        }
+        else{
+            $stmt->close();
+            return false;
+        }
     }
 
     function delete($messageID, $User) {
