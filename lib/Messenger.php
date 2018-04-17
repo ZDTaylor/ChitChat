@@ -148,6 +148,9 @@ class Messenger {
 
     function edit($message, $User) {
         // take in a message with an id and userID, and update the content of the message IF the userID matches the one in the DB
+        
+        //Match userID with userID in database
+
         query = "UPDATE Messages SET content = ? WHERE userID = ?";
         if (!$stmt = $this->database->prepare($query)) {
             return false;
