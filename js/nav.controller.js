@@ -74,6 +74,7 @@
                             vm.error = false;
                             vm.user = userservice.user;
                             vm.dropdownMessage = "Login";
+                            vm.dropdownIsOpen = false;
                         }
                         else {
                             vm.error = true;
@@ -95,6 +96,7 @@
                             vm.error = false;
                             vm.user = userservice.user;
                             vm.dropdownMessage = "Login";
+                            vm.dropdownIsOpen = false;
                         }
                         else {
                             vm.error = true;

@@ -28,7 +28,7 @@
                         if (response.success === true) {
                             vm.error = false;
                             vm.messageContent = "";
-                            vm.message.messageId = response.messageId;
+                            vm.message.messageID = response.messageID;
                             messageservice.messages.push(vm.message);
                             vm.message = new Message(poster = userservice.user.userId);
                             messageservice.load();
