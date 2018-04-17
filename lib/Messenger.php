@@ -70,7 +70,7 @@ class Messenger {
         else {
             $stmt->close();
             return false;
-        }                                                                                                                                               
+        }
     }
 
     function post($message){
@@ -149,10 +149,10 @@ class Messenger {
 
     function edit($message, $User) {
         // take in a message with an id and userID, and update the content of the message IF the userID matches the one in the DB
-        
+
         //Match userID with userID in database
 
-        query = "UPDATE Messages SET content = ? WHERE userID = ?";
+        $query = "UPDATE Messages SET content = ? WHERE userID = ?";
         if (!$stmt = $this->database->prepare($query)) {
             return false;
         }
@@ -161,7 +161,7 @@ class Messenger {
         }
         if ($stmt->execute()){
             $stmt->close();
-            return true;                
+            return true;
         }
         else{
             $stmt->close();
@@ -171,7 +171,7 @@ class Messenger {
 
     function delete($messageID, $User) {
         // delete the message with messageID.  User checking will be done in the api file
-        if $User->isAdmin{
+        if ($User->isAdmin) {
             $query = "DELETE FROM Messages WHERE messageID = ?";
             if (!$stmt = $this->database->prepare($query)) {
                 return false;
@@ -182,7 +182,7 @@ class Messenger {
 
             if ($stmt->execute()){
                 $stmt->close();
-                return true;                
+                return true;
             }
             else{
                 $stmt->close();
@@ -199,7 +199,7 @@ class Messenger {
             }
             if ($stmt->execute()){
                 $stmt->close();
-                return true;                
+                return true;
             }
             else{
                 $stmt->close();
