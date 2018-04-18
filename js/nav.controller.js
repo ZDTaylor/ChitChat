@@ -26,7 +26,6 @@
             userservice.register(vm.email, vm.passwd)
                 .then(
                     function (response) { // HTTP Success
-                        console.log(response);
                         if (response.success === true) {
                             vm.error = false;
                         }
@@ -36,7 +35,6 @@
                     })
                 .catch(
                     function (response) { // HTTP Failure
-                        console.log(response);
                         vm.error = true;
                     });
         }
@@ -45,7 +43,6 @@
             userservice.login(vm.email, vm.passwd)
                 .then(
                     function (response) { // HTTP Success
-                        console.log(response);
                         if (response.success === true) {
                             vm.user = userservice.user;
                             vm.email = "";
@@ -60,7 +57,6 @@
                     })
                 .catch(
                     function (response) { // HTTP Failure
-                        console.log(response);
                         vm.error = true;
                     });
         }
@@ -69,7 +65,6 @@
             userservice.logout()
                 .then(
                     function (response) {
-                        console.log(response);
                         if (response.success === true) {
                             vm.error = false;
                             vm.user = userservice.user;
@@ -82,7 +77,6 @@
                     })
                 .catch(
                     function (response) {
-                        console.log(response);
                         vm.error = true;
                     });
         }
@@ -91,7 +85,6 @@
             userservice.deleteAccount()
                 .then(
                     function (response) {
-                        console.log(response);
                         if (response.success === true) {
                             vm.error = false;
                             vm.user = userservice.user;
@@ -104,7 +97,6 @@
                     })
                 .catch(
                     function (response) {
-                        console.log(response);
                         vm.error = true;
                     });
         }

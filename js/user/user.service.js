@@ -36,7 +36,6 @@
                     function (response) {
                         if (response.success == true) {
                             service.user = new User(response.user);
-                            console.log(service.user);
                         }
                         return response;
                     });
@@ -51,7 +50,6 @@
                         if (response.success == true) {
                             service.user = new User();
                         }
-                        console.log(response);
                         return response;
                     });
         }

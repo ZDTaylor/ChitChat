@@ -31,13 +31,19 @@
                                         // in both -> update
                                         // in messageservice but not bm -> add
                                         if (j < vm.messages.length && messageservice.messages[i].messageID === vm.messages[j].messageID) {
-                                            updateMessage(i, j);
+                                            vm.messages[j].content = messageservice.messages[i].content;
+                                            vm.messages[j].mentions = messageservice.messages[i].mentions;
+                                            vm.messages[j].net_likes = messageservice.messages[i].net_likes;
+                                            vm.messages[j].reaction = messageservice.messages[i].reaction;
                                         }
                                         else if (j < vm.messages.length && messageservice.messages[i].messageID !== vm.messages[j].messageID) {
                                             do {
                                                 vm.messages.splice(j, 1);
                                             } while (messageservice.messages[i].messageID !== vm.messages[j].messageID);
-                                            updateMessage(i, j);
+                                            vm.messages[j].content = messageservice.messages[i].content;
+                                            vm.messages[j].mentions = messageservice.messages[i].mentions;
+                                            vm.messages[j].net_likes = messageservice.messages[i].net_likes;
+                                            vm.messages[j].reaction = messageservice.messages[i].reaction;
                                         }
                                         else {
                                             var message = new Message(messageservice.messages[i]);
@@ -58,7 +64,6 @@
                 vm.source.onmessage = function (event) {
                     $scope.$apply(function () {
                         var response = angular.fromJson(event.data);
-                        console.log(response);
                         if (response.success == true) {
                             var j = 0;
                             for (var i = 0; i < response.messages.length; i++) {

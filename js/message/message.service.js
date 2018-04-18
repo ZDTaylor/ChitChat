@@ -10,6 +10,7 @@
         var service = {
             messages: [],
             load: load,
+            loadStream: loadStream,
             post: post,
             edit: edit,
             remove: remove,
