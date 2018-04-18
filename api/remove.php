@@ -19,18 +19,19 @@
             unset($_SESSION["user"]);
         }
     }
+    if (!empty($_SESSION["user"])) {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $data = json_decode(file_get_contents("php://input"), true);
 
-        $data = json_decode(file_get_contents("php://input"), true);
-
-        if (!empty($data["messageid"])) {
-
-            // attempt to remove the message with $data["messageid"] and update $response["success"] accordingly
-
+            if (!empty($data["messageid"])) {
+                // attempt to remove the message with $data["messageid"] and update $response["success"] accordingly
+                $removal = $Messenger->delete($messageID, $User->userID);
+                if($removal != false){
+                    $response["success"] = true;
+                }
+            }
         }
-
-    }
-
+    }    
     echo json_encode($response);
 ?>
