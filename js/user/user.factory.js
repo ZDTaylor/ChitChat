@@ -9,7 +9,7 @@
         function UserConstructor(args = {}) {
             var user = this;
             user = {
-                userId: args.userID || null,
+                userID: args.userID || null,
                 email: args.email || null,
                 displayName: args.displayName || null,
                 isAdmin: args.isAdmin || null,
