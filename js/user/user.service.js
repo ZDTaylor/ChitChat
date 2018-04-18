@@ -12,8 +12,8 @@
             register: register,
             login: login,
             logout: logout,
-            resetpasswordemail: resetpasswordemail,
-            resetpasswordreset: resetpasswordreset,
+            resetPasswordEmail: resetPasswordEmail,
+            resetPasswordReset: resetPasswordReset,
             deleteAccount: deleteAccount,
             ban: ban,
             suspend: suspend
@@ -54,14 +54,14 @@
                     });
         }
 
-        function resetpasswordemail(email) {
-            var ResestPasswordEmail = $resource(apiUrl + 'resetpasswordemail.php');
+        function resetPasswordEmail(email) {
+            var ResetPasswordEmail = $resource(apiUrl + 'resetpasswordemail.php');
 
             return ResetPasswordEmail.save({ email: email }).$promise;
         }
 
-        function resetpasswordreset(key, newpassword) {
-            var ResestPasswordReset = $resource(apiUrl + 'resetpasswordreset.php');
+        function resetPasswordReset(key, newpassword) {
+            var ResetPasswordReset = $resource(apiUrl + 'resetpasswordreset.php');
 
             return ResetPasswordReset.save({ key: key, newpassword: newpassword }).$promise;
         }

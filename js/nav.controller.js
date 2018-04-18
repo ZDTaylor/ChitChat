@@ -18,6 +18,7 @@
         vm.register = register;
         vm.logout = logout;
         vm.deleteAccount = deleteAccount;
+        vm.resetPasswordEmail = resetPasswordEmail;
 
         vm.login(true);
         ////////////////
@@ -83,7 +84,7 @@
             var modal = modalservice.openConfirmModal('Are you sure?', 'This action will permanently delete your account!');
 
             // Only delete if user confirms the action
-            modal.response.then(function () {
+            modal.result.then(function () {
                 userservice.deleteAccount()
                     .then(
                         function (response) {
@@ -103,6 +104,23 @@
             });
         }
 
+        function resetPasswordEmail() {
+            userservice.resetPasswordEmail(vm.email)
+                .then(
+                    function (response) {
+                        if (response.success) {
+                            vm.email = "";
+                            modalservice.openGeneralModal('Success', 'Please check your email for instructions on resetting your password. (Allow up to 30 minutes).');
+                        }
+                        else {
+                            modalservice.openGeneralModal('Error', 'Please try again.');
+                        }
+                    })
+                .catch(
+                    function (response) {
+                        modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
+                    });
+        }
 
     }
 })();

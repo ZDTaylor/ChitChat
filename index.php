@@ -11,6 +11,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="http://pluto.cse.msstate.edu/~dcsp03/ChitChat/" />
 
     <title>Chit Chat</title>
     <meta name="description" content="An anonymous chat application for the 21st century">
@@ -71,7 +72,7 @@
                             <li ng-if="nav.user.userID === null"><button type="button" class="btn btn-default" ng-click="nav.login(false)">Login</button></li>
                             <li ng-if="nav.user.userID === null"><button type="button" class="btn btn-default" ng-click="nav.register()">Register</button></li>
                             <li role="separator" class="divider" ng-if="nav.user.userID === null"></li>
-                            <li ng-if="nav.user.userID === null"><a class="forgot-password" ng-click="nav.forgotPassword()">Forgot password?</a></li>
+                            <li ng-if="nav.user.userID === null"><a class="forgot-password" ng-click="nav.resetPasswordEmail()">Forgot password?</a></li>
                         </ul>
                         <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
                             <li ng-if="nav.user.userID !== null"><button type="button" class="btn btn-default" ng-click="nav.logout()">Logout</button></li>
@@ -175,7 +176,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" ng-click="modal.cancel()">Cancel</button>
-            <button type="button" class="btn btn-default" ng-click="modal.ok()">Confirm</button>
+            <button type="button" class="btn btn-default" ng-click="modal.ok()">OK</button>
         </div>
     </script>
 
@@ -191,7 +192,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" ng-click="modal.ok()">Confirm</button>
+            <button type="button" class="btn btn-default" ng-click="modal.ok()">OK</button>
         </div>
     </script>
 
@@ -210,9 +211,11 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" ng-click="modal.cancel()">Cancel</button>
-            <button type="button" class="btn btn-default" ng-click="modal.ok()">Confirm</button>
+            <button type="button" class="btn btn-default" ng-click="modal.ok()">OK</button>
         </div>
     </script>
+
+    <div ng-controller="ResetPasswordController as reset"></div>
 
 
     <!-- Comment the following before final upload to reduce file size -->
@@ -253,5 +256,6 @@
     <script src="js/nav.controller.js"></script>
     <script src="js/messageScroll.controller.js"></script>
     <script src="js/messageBox.controller.js"></script>
+    <script src="js/resetPassword.controller.js"></script>
 </body>
 </html>

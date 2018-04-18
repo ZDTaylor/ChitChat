@@ -5,5 +5,8 @@
         'app.core',
         'app.users',
         'app.messages'
-    ]);
+    ]).config(function ($locationProvider) {
+        $locationProvider.html5Mode(true);
+    });
+
 })();
