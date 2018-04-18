@@ -27,7 +27,8 @@ class Messenger {
         FROM Messages m
         LEFT JOIN Mentions n ON (m.messageID = n.messageID)
         LEFT JOIN Reactions r ON (m.messageID = r.messageID)
-        GROUP BY m.messageID";
+        GROUP BY m.messageID
+        ORDER BY m.messageID";
 
         $messageID;
         $poster;
@@ -57,7 +58,7 @@ class Messenger {
                 $message = new Message();
                 $message->messageID = $messageID;
                 $message->content = $content;
-                $message->poster = $userID;
+                $message->poster = $poster;
                 $message->net_likes = !is_null($net_likes) ? intval($net_likes) : 0;
                 $message->mentions = !is_null($mentions) ? array_map('intval', explode(",", $mentions)) : [];
                 $message->reaction = !is_null($reaction) ? intval($reaction) : 0;
@@ -146,17 +147,65 @@ class Messenger {
         }
     }
 
-    function edit($message) {
+    function edit($message, $User) {
         // take in a message with an id and userID, and update the content of the message IF the userID matches the one in the DB
+
+        //Match userID with userID in database
+
+        $query = "UPDATE Messages SET content = ? WHERE userID = ?";
+        if (!$stmt = $this->database->prepare($query)) {
+            return false;
+        }
+        if (!$stmt->bind_param('si', $message, $User->userID)) {
+            return false;
+        }
+        if ($stmt->execute()){
+            $stmt->close();
+            return true;
+        }
+        else{
+            $stmt->close();
+            return false;
+        }
     }
 
-    function delete($messageID, $userID) {
+    function delete($messageID, $User) {
         // delete the message with messageID.  User checking will be done in the api file
+        if ($User->isAdmin) {
+            $query = "DELETE FROM Messages WHERE messageID = ?";
+            if (!$stmt = $this->database->prepare($query)) {
+                return false;
+            }
+            if (!$stmt->bind_param('i', $messageID)) {
+                return false;
+            }
 
-        //Do during lab
-        $query = "DELETE FROM Messages WHERE $userID = userID OR $userID = "; //How to identify Admin account?
-        
-        
+            if ($stmt->execute()){
+                $stmt->close();
+                return true;
+            }
+            else{
+                $stmt->close();
+                return false;
+            }
+        }
+        else{
+            $query = "DELETE FROM Messages WHERE messageID = ? AND userID = ?";
+            if (!$stmt = $this->database->prepare($query)) {
+                return false;
+            }
+            if (!$stmt->bind_param('ii', $messageID, $User->userID)) {
+                return false;
+            }
+            if ($stmt->execute()){
+                $stmt->close();
+                return true;
+            }
+            else{
+                $stmt->close();
+                return false;
+            }
+        }
     }
 
     function like($messageID, $userID) {

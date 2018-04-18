@@ -5,8 +5,8 @@
         .module('app')
         .controller('NavController', NavController);
 
-    NavController.inject = ['userservice'];
-    function NavController(userservice) {
+    NavController.inject = ['userservice', 'modalservice'];
+    function NavController(userservice, modalservice) {
         var vm = this;
         vm.user = userservice.user;
         vm.error = false;
@@ -18,50 +18,46 @@
         vm.register = register;
         vm.logout = logout;
         vm.deleteAccount = deleteAccount;
+        vm.resetPasswordEmail = resetPasswordEmail;
 
-        vm.login();
+        vm.login(true);
         ////////////////
 
         function register() {
             userservice.register(vm.email, vm.passwd)
                 .then(
                     function (response) { // HTTP Success
-                        console.log(response);
                         if (response.success === true) {
-                            vm.error = false;
+                            modalservice.openGeneralModal('Success', 'Please log in now.');
                         }
                         else {
-                            vm.error = true;
+                            modalservice.openGeneralModal('Error', 'Please try again.');
                         }
                     })
                 .catch(
                     function (response) { // HTTP Failure
-                        console.log(response);
-                        vm.error = true;
+                        modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
                     });
         }
 
-        function login() {
+        function login(suppress) {
             userservice.login(vm.email, vm.passwd)
                 .then(
                     function (response) { // HTTP Success
-                        console.log(response);
                         if (response.success === true) {
                             vm.user = userservice.user;
                             vm.email = "";
                             vm.passwd = "";
                             vm.dropdownMessage = vm.user.email;
                             vm.dropdownIsOpen = false;
-                            vm.error = false;
                         }
                         else {
-                            vm.error = true;
+                            if (!suppress) { modalservice.openGeneralModal('Error', 'Please try again.'); }
                         }
                     })
                 .catch(
                     function (response) { // HTTP Failure
-                        console.log(response);
-                        vm.error = true;
+                        if (!suppress) { modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later'); }
                     });
         }
 
@@ -69,41 +65,60 @@
             userservice.logout()
                 .then(
                     function (response) {
-                        console.log(response);
                         if (response.success === true) {
-                            vm.error = false;
                             vm.user = userservice.user;
                             vm.dropdownMessage = "Login";
+                            vm.dropdownIsOpen = false;
                         }
                         else {
-                            vm.error = true;
+                            modalservice.openGeneralModal('Error', 'Please try again.');
                         }
                     })
                 .catch(
                     function (response) {
-                        console.log(response);
-                        vm.error = true;
+                        modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
                     });
         }
 
         function deleteAccount() {
-            userservice.deleteAccount()
+            var modal = modalservice.openConfirmModal('Are you sure?', 'This action will permanently delete your account!');
+
+            // Only delete if user confirms the action
+            modal.result.then(function () {
+                userservice.deleteAccount()
+                    .then(
+                        function (response) {
+                            if (response.success === true) {
+                                vm.user = userservice.user;
+                                vm.dropdownMessage = "Login";
+                                vm.dropdownIsOpen = false;
+                            }
+                            else {
+                                modalservice.openGeneralModal('Error', 'Please try again.');
+                            }
+                        })
+                    .catch(
+                        function (response) {
+                            modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
+                        });
+            });
+        }
+
+        function resetPasswordEmail() {
+            userservice.resetPasswordEmail(vm.email)
                 .then(
                     function (response) {
-                        console.log(response);
-                        if (response.success === true) {
-                            vm.error = false;
-                            vm.user = userservice.user;
-                            vm.dropdownMessage = "Login";
+                        if (response.success) {
+                            vm.email = "";
+                            modalservice.openGeneralModal('Success', 'Please check your email for instructions on resetting your password. (Allow up to 30 minutes).');
                         }
                         else {
-                            vm.error = true;
+                            modalservice.openGeneralModal('Error', 'Please try again.');
                         }
                     })
                 .catch(
                     function (response) {
-                        console.log(response);
-                        vm.error = true;
+                        modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
                     });
         }
 

@@ -18,7 +18,11 @@
 
             // pass key and newpassword to usermanager resetpasswordreset and
             // update $response["success"] accordingly
+            $reset = $userManager->resetPasswordReset($data["key"], $data["newpassword"]);
 
+            if ($reset == true) {
+                $response["success"] = true;
+            }
         }
     }
 

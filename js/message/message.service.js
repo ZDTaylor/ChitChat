@@ -10,6 +10,7 @@
         var service = {
             messages: [],
             load: load,
+            loadStream: loadStream,
             post: post,
             edit: edit,
             remove: remove,
@@ -31,6 +32,21 @@
                         }
                         return response;
                     });
+        }
+
+        function loadStream() {
+            service.source = new EventSource(apiUrl + 'load.stream.php');
+
+            service.source.onmessage = function (event) {
+                $scope.$apply(function () {
+                    var response = angular.fromJson(event.data);
+                    if (response.success == true) {
+                        service.messages = response.messages;
+                    }
+                });
+            };
+
+            return service.source;
         }
 
         function post(message) {
