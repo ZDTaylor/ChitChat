@@ -2,6 +2,7 @@
     'use strict';
 
     angular.module('app.messages', [
-        'ngResource'
+        'ngResource',
+        'app.core'
     ]);
 })();

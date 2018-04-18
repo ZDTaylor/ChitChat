@@ -15,6 +15,10 @@ body {
 
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
 /*
 ChitChat styling
 */

@@ -2,9 +2,7 @@
     'use strict';
 
     angular.module('app', [
-        'ngAnimate',
-        'ui.bootstrap',
-
+        'app.core',
         'app.users',
         'app.messages'
     ]);
