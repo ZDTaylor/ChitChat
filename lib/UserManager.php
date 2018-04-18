@@ -208,7 +208,7 @@ class UserManager {
         // ALWAYS close the statement before returning.
 
         if ($stmt->execute()) {
-            $stmt->store_results();
+            $stmt->store_result();
             if ($stmt->num_rows == 0) {
                 return false;
             }
@@ -288,7 +288,7 @@ class UserManager {
 
         $mail->Body    = "
 Please visit the following link to reset your password:
-http://pluto.cse.msstate.edu/~dcsp03/Chitchat/index.php?reset-key=$resetUrl
+http://pluto.cse.msstate.edu/~dcsp03/ChitChat?resetkey=$resetUrl
 
 If you did not initiate this reset, you can ignore this message.
 
@@ -306,6 +306,34 @@ Your friendly neighborhood chat tech support";
 
     //Resetpasswordreset - takes the key created in resetpasswordsendemail and the user's new password to update password
     function resetPasswordReset($key, $newPassword){
+
+        if (!$hashed_password = crypt($newPassword, $this->salt)) {
+            return false;
+        }
+
+		if (!$stmt = $this->database->prepare("Update Users SET passwd = ?, resetUrl = NULL WHERE resetUrl = ?;")) {
+            return false;
+        }
+
+        // Bind parameters to the statement for every '?' in the prepared statement.  Must specify type
+        // In this case both are strings, so you can use 'ss' or 's s'
+        // Type codes can be found here: https://secure.php.net/manual/en/mysqli-stmt.bind-param.php
+        // If it returns false, return false.
+        if (!$stmt->bind_param('ss', $hashed_password, $key)) {
+            return false;
+        }
+
+        // Execute the statement.  This will just run it.
+        // If it was successful, return true.  Otherwise return false.
+        // ALWAYS close the statement before returning.
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        }
+        else {
+            $stmt->close();
+            return false;
+        }
     }
 
 
