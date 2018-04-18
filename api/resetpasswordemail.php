@@ -18,7 +18,7 @@
 
             // pass email to usermanager resetpasswordemail and
             // update $response["success"] accordingly
-                $answer = $userManager->resetPasswordSendEmail($email);
+                $answer = $userManager->resetPasswordSendEmail($data["email"]);
 
                 if ($answer === true) {
                     $response["success"] = true;
