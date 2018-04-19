@@ -19,16 +19,16 @@
     }
 
 	if($_SESSION["user"]->isAdmin == true){
-		
+
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 			$data = json_decode(file_get_contents("php://input"), true);
 
-			if (!empty($data["userid"])) {
+			if (!empty($data["userID"])) {
 
 				// pass userid to usermanager ban and
 				// update $response["success"] accordingly
-					$ban = $userManager->suspend($userid)
+					$ban = $userManager->suspend($data["userID"]);
 					// $data["userid"] is the user to suspend, current user should be in session variable
 					if($suspend ==true){
 					$response["success"] = true;

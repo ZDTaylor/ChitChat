@@ -24,10 +24,13 @@
 
         $data = json_decode(file_get_contents("php://input"), true);
 
-        if (!empty($data["messageid"])) {
+        if (!empty($data["messageID"])) {
 
-            // attempt to like the message with $data["messageid"] and update $response["success"] accordingly
-
+            // attempt to like the message with $data["messageID"] and update $response["success"] accordingly
+            $like = $Messenger->like($data["messageID"], $userID);
+            if ($like != false){
+                $response["success"] = true;
+            }
         }
 
     }

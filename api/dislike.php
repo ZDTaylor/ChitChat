@@ -24,12 +24,14 @@
 
         $data = json_decode(file_get_contents("php://input"), true);
 
-        if (!empty($data["messageid"])) {
+        if (!empty($data["messageID"])) {
 
-            // attempt to dislike the message with $data["messageid"] and update $response["success"] accordingly
-
+            // attempt to dislike the message with $data["messageID"] and update $response["success"] accordingly
+            $dislike = $Messenger->dislike($data["messageID"], $userID);
+            if ($dislike != false){
+                $response["success"] = true;
+            }
         }
-
     }
 
     echo json_encode($response);

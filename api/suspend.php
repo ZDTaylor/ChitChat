@@ -18,17 +18,17 @@
         }
     }
 	if($_SESSION["user"]->isAdmin == true){
-		
+
 
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 			$data = json_decode(file_get_contents("php://input"), true);
 
-			if (!empty($data["userid"]) && !empty($data["datetime"])) {
+			if (!empty($data["userID"]) && !empty($data["datetime"])) {
 
 				// pass userid and datetime to usermanager suspend and
 				// update $response["success"] accordingly
-				$suspend = $userManager->suspend($userid, $datetime)
+				$suspend = $userManager->suspend($data["userID"], $data["datetime"]);
 				// $data["userid"] is the user to suspend, current user should be in session variable
 				if($suspend ==true){
 				$response["success"] = true;
