@@ -20,19 +20,23 @@
         }
     }
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!empty($_SESSION["user"])) {
 
-        $data = json_decode(file_get_contents("php://input"), true);
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        if (!empty($data["messageID"])) {
+            $data = json_decode(file_get_contents("php://input"), true);
 
-            // attempt to like the message with $data["messageID"] and update $response["success"] accordingly
-            $like = $Messenger->like($data["messageID"], $userID);
-            if ($like != false){
-                $response["success"] = true;
+            if (!empty($data["messageID"])) {
+
+                // attempt to like the message with $data["messageID"] and update $response["success"] accordingly
+                $like = $Messenger->like($data["messageID"], $_SESSION["user"]->userID);
+
+                if ($like != false){
+                    $response["success"] = true;
+                }
             }
-        }
 
+        }
     }
 
     echo json_encode($response);

@@ -347,7 +347,8 @@ Your friendly neighborhood chat tech support";
         // In this case both are strings, so you can use 'ss' or 's s'
         // Type codes can be found here: https://secure.php.net/manual/en/mysqli-stmt.bind-param.php
         // If it returns false, return false.
-        if (!$stmt->bind_param('ss', $suspendTime, $userToSuspend)) {
+        $suspendTime = $suspendTime->format('Y-m-d H:i:s');
+        if (!$stmt->bind_param('si', $suspendTime, $userToSuspend)) {
             return false;
         }
 
@@ -368,7 +369,7 @@ Your friendly neighborhood chat tech support";
 
     //Ban function - bans a user's account if the logged in user is admin
     function ban($userToBan){
-		if (!$stmt = $this->database->prepare("Update Users SET ban = 1 WHERE userID = ?;")) {
+		if (!$stmt = $this->database->prepare("Update Users SET banned = 1 WHERE userID = ?;")) {
             return false;
         }
 
@@ -376,7 +377,7 @@ Your friendly neighborhood chat tech support";
         // In this case both are strings, so you can use 'ss' or 's s'
         // Type codes can be found here: https://secure.php.net/manual/en/mysqli-stmt.bind-param.php
         // If it returns false, return false.
-        if (!$stmt->bind_param('s', $userToBan)) {
+        if (!$stmt->bind_param('i', $userToBan)) {
             return false;
         }
 

@@ -149,7 +149,7 @@ class Messenger {
 
     function edit($message, $userID) {
         // take in a message with an id and userID, and update the content of the message IF the userID matches the one in the DB
-        
+
         $messageID;
         $error = false;
         $userID = $message->poster;
@@ -192,7 +192,7 @@ class Messenger {
                 }
                 $stmt->close();
             }
-            
+
             else {
                 $error = true;
             }
@@ -220,9 +220,9 @@ class Messenger {
         }
     }
 
-    function delete($messageID, $User) {
+    function delete($messageID, $user) {
         // delete the message with messageID.  User checking will be done in the api file
-        if ($User->isAdmin) {
+        if ($user->isAdmin) {
             $query = "DELETE FROM Messages WHERE messageID = ?";
             if (!$stmt = $this->database->prepare($query)) {
                 return false;
@@ -245,7 +245,7 @@ class Messenger {
             if (!$stmt = $this->database->prepare($query)) {
                 return false;
             }
-            if (!$stmt->bind_param('ii', $messageID, $User->userID)) {
+            if (!$stmt->bind_param('ii', $messageID, $user->userID)) {
                 return false;
             }
             if ($stmt->execute()){
@@ -268,7 +268,7 @@ class Messenger {
         if (!$stmt = $this->database->prepare($query)) {
             return false;
         }
-        if (!$stmt->bind_param('ii', $messageID, $User->userID)) {
+        if (!$stmt->bind_param('ii', $messageID, $userID)) {
             return false;
         }
         if ($stmt->execute()){
@@ -278,7 +278,7 @@ class Messenger {
         else{
             $stmt->close();
             return false;
-        }    
+        }
 
     }
 
@@ -291,7 +291,7 @@ class Messenger {
         if (!$stmt = $this->database->prepare($query)) {
             return false;
         }
-        if (!$stmt->bind_param('ii', $messageID, $User->userID)) {
+        if (!$stmt->bind_param('ii', $messageID, $userID)) {
             return false;
         }
         if ($stmt->execute()){
