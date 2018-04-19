@@ -123,12 +123,8 @@ html {
   flex-direction: column;
 }
 
-.cc-message-content {
+.cc-message-area {
     justify-content: center;
-}
-
-.cc-message-content > pre {
-    margin: 0px;
 }
 
 .cc-message-votes {
@@ -136,31 +132,10 @@ html {
     text-align: center;
 }
 
-.blue {
-        color: blue;
-}
-    
-.red {
-    color: red;
-}
-
-.glyphicon.glyphicon-chevron-up{
-    font-size: 30px;
-}
-    
-.glyphicon.glyphicon-chevron-down{
-    font-size: 30px;
-}
-
-.font1 {
-    font-weight: bold;
-    font-weight:600;
-}
-
-div.bg-info{
+.cc-message-content {
     display: block;
     padding: 9.5px;
-    margin: 0 0 0px;
+    margin: 0px;
     font-size: 13px;
     line-height: 1.42857143;
     color: #333;
@@ -170,8 +145,27 @@ div.bg-info{
     border: 1px solid #ccc;
     border-radius: 4px;
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    white-space: pre;
 }
-    
-div.message_i{
-    font-style: italic;
+
+.cc-vote {
+    font-size: 30px;
+}
+
+.cc-message-quote{
+    font-style: italic !important;
+    font-weight: normal !important;
+}
+
+.cc-message-mention {
+    font-weight: bold !important;
+    background-color: #d9edf7 !important;
+}
+
+.cc-blue {
+        color: blue !important;
+}
+
+.cc-red {
+    color: red !important;
 }

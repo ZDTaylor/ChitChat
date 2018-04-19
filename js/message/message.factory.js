@@ -6,7 +6,10 @@
         .factory('Message', Message);
 
     function Message() {
-        function MessageConstructor(args = {}) {
+        function MessageConstructor(args) {
+            if (typeof (args) == 'undefined') {
+                args = {};
+            }
             var message = this;
             message = {
                 messageID: args.messageID || null,

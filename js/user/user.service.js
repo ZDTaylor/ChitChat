@@ -16,7 +16,8 @@
             resetPasswordReset: resetPasswordReset,
             deleteAccount: deleteAccount,
             ban: ban,
-            suspend: suspend
+            suspend: suspend,
+            displayName: displayName
         };
 
         return service;

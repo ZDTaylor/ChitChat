@@ -127,15 +127,16 @@
                         </div>
                         <div class="panel-body">
                             <div class="row row-eq-height">
-                                <div class="col-xs-11 cc-message-content">
-                                    <pre ng-bind="message.content"></pre>
+                                <div class="col-xs-11 cc-message-area">
+                                    <div class="cc-message-content" ng-class="{'cc-message-mention': message.mentions.indexOf(messageScroll.userservice.user.userID) !== -1}"
+                                        ng-bind="message.content"></div>
                                 </div>
                                 <div class="col-xs-1 cc-message-votes">
-                                    <span class="glyphicon glyphicon-chevron-up" ng-click="messageScroll.likeMessage(message)"></span>
+                                    <span class="glyphicon glyphicon-chevron-up cc-vote" ng-class="{'cc-blue': message.reaction === 1}" ng-click="messageScroll.likeMessage(message)"></span>
                                     <br>
                                     <span ng-bind="message.net_likes"></span>
                                     <br>
-                                    <span class="glyphicon glyphicon-chevron-down" ng-click="messageScroll.dislikeMessage(message)"></span>
+                                    <span class="glyphicon glyphicon-chevron-down cc-vote" ng-class="{'cc-red': message.reaction === -1}" ng-click="messageScroll.dislikeMessage(message)"></span>
                                 </div>
                             </div>
                         </div>

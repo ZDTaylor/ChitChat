@@ -5,8 +5,8 @@
         .module('app')
         .controller('MessageScrollController', MessageScrollController);
 
-    MessageScrollController.inject = ['userservice', 'messageservice', '$interval', 'Message', '$scope'];
-    function MessageScrollController(userservice, messageservice, $interval, Message, $scope) {
+    MessageScrollController.inject = ['userservice', 'messageservice', '$interval', 'Message', '$scope', 'modalservice'];
+    function MessageScrollController(userservice, messageservice, $interval, Message, $scope, modalservice) {
         var vm = this;
         vm.userservice = userservice;
         vm.load = loadMessages;
@@ -178,7 +178,9 @@
 
             modal.result
                 .then(function (response) {
-                    userservice.suspend(message.poster, response.date)
+                    var datetime = new Date(Date.UTC(response.date.getFullYear(), response.date.getMonth(), response.date.getDate()));
+                    datetime = Math.floor(datetime.getTime() / 1000);
+                    userservice.suspend(message.poster, datetime)
                         .then(function (response) {
                             if (response.success) {
                                 modalservice.openGeneralModal('Success', 'The user is now suspended.');
