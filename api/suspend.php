@@ -3,6 +3,8 @@
     require_once "lib/UserManager.php";
     require_once "lib/sanitize_input.php";
     header('Content-type: application/json');
+  error_reporting(E_ALL);
+  ini_set('display_errors', 1);
 
     $userManager = new UserManager();
     $response = [
@@ -26,9 +28,10 @@
 
 			if (!empty($data["userID"]) && !empty($data["datetime"])) {
 
+                $datetime = new DateTime("@".$data["datetime"]);
 				// pass userid and datetime to usermanager suspend and
-				// update $response["success"] accordingly
-				$suspend = $userManager->suspend($data["userID"], $data["datetime"]);
+                // update $response["success"] accordingly
+				$suspend = $userManager->suspend($data["userID"], $datetime);
 				// $data["userid"] is the user to suspend, current user should be in session variable
 				if($suspend ==true){
 				$response["success"] = true;

@@ -28,9 +28,9 @@
 
 				// pass userid to usermanager ban and
 				// update $response["success"] accordingly
-					$ban = $userManager->suspend($data["userID"]);
+					$ban = $userManager->ban($data["userID"]);
 					// $data["userid"] is the user to suspend, current user should be in session variable
-					if($suspend ==true){
+					if($ban == true){
 					$response["success"] = true;
 					}
             // $data["userid"] is the user to ban, current user should be in session variable

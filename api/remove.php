@@ -26,7 +26,8 @@
 
             if (!empty($data["messageID"])) {
                 // attempt to remove the message with $data["messageID"] and update $response["success"] accordingly
-                $removal = $Messenger->delete($data["messageID"], $User->userID);
+                $removal = $Messenger->delete($data["messageID"], $_SESSION["user"]);
+
                 if($removal != false){
                     $response["success"] = true;
                 }
