@@ -8,7 +8,7 @@
     $userManager = new UserManager();
     $Messenger = new Messenger();
     $response = [
-        "messageId" => null,
+        "messageID" => null,
         "success" => false
     ];
 
@@ -42,13 +42,11 @@
                     $post = $Messenger->post($message);
 
                     if ($post !== false) {
-                        $response["messageId"] = $post;
+                        $response["messageID"] = $post;
                         $response["success"] = true;
                     }
                 }
-
             }
-
         }
     }
 
