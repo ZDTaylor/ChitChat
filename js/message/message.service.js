@@ -61,22 +61,22 @@
             return Edit.save({ message: message }).$promise;
         }
 
-        function remove(messageid) {
+        function remove(messageID) {
             var Remove = $resource(apiUrl + 'remove.php');
 
-            return Remove.save({ messageid: messageid }).$promise;
+            return Remove.save({ messageID: messageID }).$promise;
         }
 
-        function like(messageid) {
+        function like(messageID) {
             var Like = $resource(apiUrl + 'like.php');
 
-            return Like.save({ messageid: messageid }).$promise;
+            return Like.save({ messageID: messageID }).$promise;
         }
 
-        function dislike(messageid) {
+        function dislike(messageID) {
             var Dislike = $resource(apiUrl + 'dislike.php');
 
-            return Dislike.save({ messageid: messageid }).$promise;
+            return Dislike.save({ messageID: messageID }).$promise;
         }
     }
 })();

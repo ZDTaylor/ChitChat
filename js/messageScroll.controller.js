@@ -10,7 +10,12 @@
         var vm = this;
         vm.userservice = userservice;
         vm.load = loadMessages;
-        vm.displayName = displayName;
+        vm.displayName = userservice.displayName;
+        vm.likeMessage = likeMessage;
+        vm.dislikeMessage = dislikeMessage;
+        vm.deleteMessage = deleteMessage;
+        vm.ban = ban;
+        vm.suspend = suspend;
         vm.messages = [];
 
         vm.load();
@@ -98,15 +103,94 @@
             }
         }
 
-        function displayName(userID) {
-            // https://gist.github.com/endel/321925f6cafa25bbfbde
-            Number.prototype.pad = function (size) {
-                var s = String(this);
-                while (s.length < (size || 2)) { s = "0" + s; }
-                return s;
-            }
+        function likeMessage(message) {
+            messageservice.like(message.messageID)
+                .then(function (response) {
+                    if (response.success) {
+                        // success
+                    }
+                    else {
+                        modalservice.openGeneralModal('Error', 'Please try again.');
+                    }
+                })
+                .catch(function (response) {
+                    modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
+                });
+        }
 
-            return "Anonymous#" + userID.pad(8);
+        function dislikeMessage(message) {
+            messageservice.dislike(message.messageID)
+                .then(function (response) {
+                    if (response.success) {
+                        //success
+                    }
+                    else {
+                        modalservice.openGeneralModal('Error', 'Please try again.');
+                    }
+                })
+                .catch(function (response) {
+                    modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
+                });
+        }
+
+        function deleteMessage(message) {
+            var modal = modalservice.openConfirmModal('Are you sure?', 'Deleting a message cannot be undone.');
+
+            modal.result
+                .then(function (response) {
+                    messageservice.remove(message.messageID)
+                        .then(function (response) {
+                            if (response.success) {
+                                //success
+                            }
+                            else {
+                                modalservice.openGeneralModal('Error', 'Please try again.');
+                            }
+                        })
+                        .catch(function (response) {
+                            modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
+                        });
+                });
+        }
+
+        function ban(message) {
+            var modal = modalservice.openConfirmModal('Are you sure?', 'Banning a user is a serious action that should not be taken lightly.  This action cannot be undone.');
+
+            modal.result
+                .then(function (response) {
+                    userservice.ban(message.poster)
+                        .then(function (response) {
+                            if (response.success) {
+                                modalservice.openGeneralModal('Success', 'The user is now banned.');
+                            }
+                            else {
+                                modalservice.openGeneralModal('Error', 'Please try again.');
+                            }
+                        })
+                        .catch(function (response) {
+                            modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
+                        });
+                });
+        }
+
+        function suspend(message) {
+            var modal = modalservice.openSuspendModal();
+
+            modal.result
+                .then(function (response) {
+                    userservice.suspend(message.poster, response.date)
+                        .then(function (response) {
+                            if (response.success) {
+                                modalservice.openGeneralModal('Success', 'The user is now suspended.');
+                            }
+                            else {
+                                modalservice.openGeneralModal('Error', 'Please try again.');
+                            }
+                        })
+                        .catch(function (response) {
+                            modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
+                        });
+                });
         }
     }
 })();

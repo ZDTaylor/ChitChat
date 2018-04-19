@@ -30,7 +30,7 @@
                             vm.messageContent = "";
                             vm.message.messageID = response.messageID;
                             messageservice.messages.push(vm.message);
-                            vm.message = new Message(poster = userservice.user.userId);
+                            vm.message = new Message(poster = userservice.user.userID);
                             messageservice.load();
                         }
                     })

@@ -52,7 +52,7 @@
                             vm.dropdownIsOpen = false;
                         }
                         else {
-                            if (!suppress) { modalservice.openGeneralModal('Error', 'Please try again.'); }
+                            if (!suppress) { modalservice.openGeneralModal('Error', 'Please check your email and username, and try again.'); }
                         }
                     })
                 .catch(
