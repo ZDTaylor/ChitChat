@@ -45,11 +45,30 @@
                 .then(
                     function (response) { // HTTP Success
                         if (response.success === true) {
-                            vm.user = userservice.user;
-                            vm.email = "";
-                            vm.passwd = "";
-                            vm.dropdownMessage = vm.user.email;
-                            vm.dropdownIsOpen = false;
+                            var now = new Date();
+                            if (response.user.banned !== 1 && response.user.suspended < now) {
+                                vm.user = userservice.user;
+                                vm.email = "";
+                                vm.passwd = "";
+                                vm.dropdownMessage = vm.user.email;
+                                vm.dropdownIsOpen = false;
+                            }
+                            else if (response.user.banned === 1) {
+                                modalservice.openGeneralModal('Banned', 'You have been permanently banned.');
+                                vm.email = "";
+                                vm.passwd = "";
+                                vm.logout();
+                            }
+                            else if (response.user.suspended > now) {
+                                modalservice.openGeneralModal('Suspended', 'You have been suspended until ' + response.user.suspended.toString());
+                                vm.email = "";
+                                vm.passwd = "";
+                                vm.logout();
+                            }
+                            else {
+                                modalservice.openGeneralModal('Error', 'Please check your email and username, and try again.');
+                            }
+
                         }
                         else {
                             if (!suppress) { modalservice.openGeneralModal('Error', 'Please check your email and username, and try again.'); }

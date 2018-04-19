@@ -37,6 +37,7 @@
                     function (response) {
                         if (response.success == true) {
                             service.user = new User(response.user);
+                            response.user.suspended = new Date(response.user.suspended);
                         }
                         return response;
                     });
