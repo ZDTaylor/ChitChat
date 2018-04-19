@@ -110,15 +110,15 @@
                         </div>
                         <div class="panel-body">
                             <div class="row row-eq-height">
-                                <div class="col-xs-11 cc-message-content">
-                                    <pre ng-bind="message.content"></pre>
+                                <div class="col-xs-11 cc-message-content font1">
+                                    <div class="bg-info message_i" ng-bind="message.content"></div>
                                 </div>
                                 <div class="col-xs-1 cc-message-votes">
-                                    <span class="glyphicon glyphicon-chevron-up"></span>
+                                    <span class="glyphicon glyphicon-chevron-up blue"></span>
                                     <br>
                                     <span ng-bind="message.net_likes"></span>
                                     <br>
-                                    <span class="glyphicon glyphicon-chevron-down"></span>
+                                    <span class="glyphicon glyphicon-chevron-down red"></span>
                                 </div>
                             </div>
                         </div>
