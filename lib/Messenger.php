@@ -21,12 +21,22 @@ class Messenger {
         m.messageID,
         m.userID as poster,
         m.content,
-        GROUP_CONCAT(DISTINCT n.userID ORDER BY n.userID ASC) AS mentions,
-        SUM(r.reaction) as net_likes,
-        IF(r.userID = ?, r.reaction, NULL) as reaction
+        n.mentions,
+        r1.net_likes,
+        r2.reaction
         FROM Messages m
-        LEFT JOIN Mentions n ON (m.messageID = n.messageID)
-        LEFT JOIN Reactions r ON (m.messageID = r.messageID)
+        LEFT JOIN (SELECT messageID,
+                   GROUP_CONCAT(DISTINCT userID ORDER BY userID ASC) AS mentions
+                   FROM Mentions
+                   GROUP BY messageID) n ON (m.messageID = n.messageID)
+        LEFT JOIN (SELECT messageID,
+                   SUM(reaction) as net_likes
+                   FROM Reactions
+                   GROUP BY messageID) r1 ON (m.messageID = r1.messageID)
+        LEFT JOIN (SELECT messageID,
+                   reaction
+                   FROM Reactions
+                   WHERE userID = ?) r2 ON (m.messageID = r2.messageID)
         GROUP BY m.messageID
         ORDER BY m.messageID";
 
@@ -147,31 +157,77 @@ class Messenger {
         }
     }
 
-    function edit($message, $User) {
+    function edit($message, $userID) {
         // take in a message with an id and userID, and update the content of the message IF the userID matches the one in the DB
+        $messageID = $message->messageID;
+        $error = false;
+        $userID = $message->poster;
+        $content = $message->content;
+        $mentions = $message->mentions;
 
-        //Match userID with userID in database
+        // Begin Transaction
+        $this->database->autocommit(FALSE);
 
-        $query = "UPDATE Messages SET content = ? WHERE userID = ?";
-        if (!$stmt = $this->database->prepare($query)) {
-            return false;
+        // Insert message into messages database
+        $query = "UPDATE Messages SET content = ? WHERE messageID = ? AND userID = ?";
+
+        if(!$stmt = $this->database->prepare($query)){
+            $error = true;
         }
-        if (!$stmt->bind_param('si', $message, $User->userID)) {
-            return false;
+
+        if (!$stmt->bind_param('sii', $content, $messageID, $userID)) {
+            $error = true;
         }
+
         if ($stmt->execute()){
             $stmt->close();
-            return true;
+
+            if (count($mentions) != 0) {
+                //Insert mentions into mentions database
+                $query = "INSERT INTO Mentions (userID, messageID) VALUES(?,?);";
+
+                if(!$stmt = $this->database->prepare($query)){
+                    $error = true;
+                }
+
+                if (!$stmt->bind_param('ii', $userID, $messageID)) {
+                    $error = true;
+                }
+
+                foreach ($mentions as $userID) {
+                    if (!$stmt->execute()) {
+                        $error = true;
+                    }
+                }
+                $stmt->close();
+            }
         }
-        else{
-            $stmt->close();
+        else {
+            $error = true;
+        }
+
+        // Commit if no error, rollback otherwise
+        if (!$error) {
+            if($this->database->commit()) {
+                $this->database->autocommit(TRUE);
+                return $messageID;
+            }
+            else {
+                $this->database->rollback();
+                $this->database->autocommit(TRUE);
+                return false;
+            }
+        }
+        else {
+            $this->database->rollback();
+            $this->database->autocommit(TRUE);
             return false;
         }
     }
 
-    function delete($messageID, $User) {
+    function delete($messageID, $user) {
         // delete the message with messageID.  User checking will be done in the api file
-        if ($User->isAdmin) {
+        if ($user->isAdmin) {
             $query = "DELETE FROM Messages WHERE messageID = ?";
             if (!$stmt = $this->database->prepare($query)) {
                 return false;
@@ -194,7 +250,7 @@ class Messenger {
             if (!$stmt = $this->database->prepare($query)) {
                 return false;
             }
-            if (!$stmt->bind_param('ii', $messageID, $User->userID)) {
+            if (!$stmt->bind_param('ii', $messageID, $user->userID)) {
                 return false;
             }
             if ($stmt->execute()){
@@ -213,6 +269,22 @@ class Messenger {
         VALUES (?, ?, 1)
         ON DUPLICATE KEY UPDATE
         reaction = IF(VALUES(reaction) = reaction, 0, VALUES(reaction))";
+
+        if (!$stmt = $this->database->prepare($query)) {
+            return false;
+        }
+        if (!$stmt->bind_param('ii', $messageID, $userID)) {
+            return false;
+        }
+        if ($stmt->execute()){
+            $stmt->close();
+            return true;
+        }
+        else{
+            $stmt->close();
+            return false;
+        }
+
     }
 
     function dislike($messageID, $userID) {
@@ -220,6 +292,21 @@ class Messenger {
         VALUES (?, ?, -1)
         ON DUPLICATE KEY UPDATE
         reaction = IF(VALUES(reaction) = reaction, 0, VALUES(reaction))";
+
+        if (!$stmt = $this->database->prepare($query)) {
+            return false;
+        }
+        if (!$stmt->bind_param('ii', $messageID, $userID)) {
+            return false;
+        }
+        if ($stmt->execute()){
+            $stmt->close();
+            return true;
+        }
+        else{
+            $stmt->close();
+            return false;
+        }
     }
 }
 

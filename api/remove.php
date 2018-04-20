@@ -24,14 +24,15 @@
 
             $data = json_decode(file_get_contents("php://input"), true);
 
-            if (!empty($data["messageid"])) {
-                // attempt to remove the message with $data["messageid"] and update $response["success"] accordingly
-                $removal = $Messenger->delete($messageID, $User->userID);
+            if (!empty($data["messageID"])) {
+                // attempt to remove the message with $data["messageID"] and update $response["success"] accordingly
+                $removal = $Messenger->delete($data["messageID"], $_SESSION["user"]);
+
                 if($removal != false){
                     $response["success"] = true;
                 }
             }
         }
-    }    
+    }
     echo json_encode($response);
 ?>

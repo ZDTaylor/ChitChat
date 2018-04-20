@@ -18,22 +18,26 @@
         }
     }
 
-    if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
-        session_start();
+    if (!empty($_SESSION["user"])) {
 
-        // attempt to delete current user account, delete their session (if not handled in class),
-        // and update $response["success"] as needed
-        if(isset($_SESSION['user'])){
-            $delete = $userManager->delete($_SESSION['user']->userID);
-            if ($delete != false) {
-                $response["success"] = true;
-                unset($_SESSION['user']);
-                setcookie(session_name(), "", time()-42000);
-                session_destroy();
+        if ($_SERVER["REQUEST_METHOD"] == "GET") {
+
+            session_start();
+
+            // attempt to delete current user account, delete their session (if not handled in class),
+            // and update $response["success"] as needed
+            if(isset($_SESSION['user'])){
+                $delete = $userManager->delete($_SESSION['user']->userID);
+                if ($delete != false) {
+                    $response["success"] = true;
+                    unset($_SESSION['user']);
+                    setcookie(session_name(), "", time()-42000);
+                    session_destroy();
+                }
             }
-        }
 
+        }
     }
 
     // Use json_encode() to return $response

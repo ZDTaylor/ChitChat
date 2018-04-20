@@ -8,9 +8,11 @@
     $userManager = new UserManager();
     $Messenger = new Messenger();
     $response = [
-        "messageId" => null,
+        "messageID" => null,
         "success" => false
     ];
+  error_reporting(E_ALL);
+  ini_set('display_errors', 1);
 
     session_start();
 
@@ -29,8 +31,25 @@
 
             if (!empty($data["message"])) {
 
+                $data["message"]["content"] = sanitize_input($data["message"]["content"]);
+                for ($i = 0; $i < count($data["message"]["mentions"]); $i++) {
+                    $data["message"]["mentions"][$i] = intval($data["message"]["mentions"][$i]);
+                }
                 // Create a message object, and update the required fields with the same fields from $data["message"]
                 // attempt to post the message and update $response["success"] accordingly
+
+                // Create quote tags
+                while (strpos($data["message"]["content"], "[QUOTE]") !== false && strpos($data["message"]["content"], "[/QUOTE]") !== false) {
+                    $data["message"]["content"] = str_replace("[QUOTE]", "<span class='cc-message-quote'>", $data["message"]["content"]);
+                    $data["message"]["content"] = str_replace("[/QUOTE]", "</span>", $data["message"]["content"]);
+                }
+
+                // Fix nesting quotes
+                while (strpos($data["message"]["content"], "&lt;span class='cc-message-quote'&gt;") !== false && strpos($data["message"]["content"], "&lt;/span&gt;") !== false) {
+                    $data["message"]["content"] = str_replace("&lt;span class='cc-message-quote'&gt;", "<span class='cc-message-quote'>", $data["message"]["content"]);
+                    $data["message"]["content"] = str_replace("&lt;/span&gt;", "</span>", $data["message"]["content"]);
+                }
+
                 $message = new Message();
                 $message->poster = $_SESSION["user"]->userID;
                 $message->content = $data["message"]["content"];
@@ -42,13 +61,11 @@
                     $post = $Messenger->post($message);
 
                     if ($post !== false) {
-                        $response["messageId"] = $post;
+                        $response["messageID"] = $post;
                         $response["success"] = true;
                     }
                 }
-
             }
-
         }
     }
 

@@ -18,7 +18,10 @@
     // If the user is already logged in, just pass the info back
     if(isset($_SESSION["user"])) {
         $_SESSION["user"] = $userManager->checkBannedSuspended($_SESSION["user"]);
-        $response["user"] = $_SESSION["user"];
+        $suspended = clone $_SESSION["user"]->suspended;
+        $suspended = $suspended->format('U').'000';
+        $response["user"] = clone $_SESSION["user"];
+        $response["user"]->suspended = intval(suspended);
         $response["success"] = true;
     }
     // login.php needs to be accessed as a POST only
@@ -41,9 +44,11 @@
             // If the method returned successfully, start a session and set the user variable
             // Also update the $response with the user object and the success status
             if ($user != false) {
-                session_start();
+                $suspended = clone $user->suspended;
+                $suspended = $suspended->format('U').'000';
                 $_SESSION["user"] = $user;
-                $response["user"] = $user;
+                $response["user"] = clone $user;
+                $response["user"]->suspended = intval($suspended);
                 $response["success"] = true;
             }
         }
