@@ -21,12 +21,22 @@ class Messenger {
         m.messageID,
         m.userID as poster,
         m.content,
-        GROUP_CONCAT(DISTINCT n.userID ORDER BY n.userID ASC) AS mentions,
-        SUM(r.reaction) as net_likes,
-        IF(r.userID = ?, r.reaction, NULL) as reaction
+        n.mentions,
+        r1.net_likes,
+        r2.reaction
         FROM Messages m
-        LEFT JOIN Mentions n ON (m.messageID = n.messageID)
-        LEFT JOIN Reactions r ON (m.messageID = r.messageID)
+        LEFT JOIN (SELECT messageID,
+                   GROUP_CONCAT(DISTINCT userID ORDER BY userID ASC) AS mentions
+                   FROM Mentions
+                   GROUP BY messageID) n ON (m.messageID = n.messageID)
+        LEFT JOIN (SELECT messageID,
+                   SUM(reaction) as net_likes
+                   FROM Reactions
+                   GROUP BY messageID) r1 ON (m.messageID = r1.messageID)
+        LEFT JOIN (SELECT messageID,
+                   reaction
+                   FROM Reactions
+                   WHERE userID = ?) r2 ON (m.messageID = r2.messageID)
         GROUP BY m.messageID
         ORDER BY m.messageID";
 
@@ -149,8 +159,7 @@ class Messenger {
 
     function edit($message, $userID) {
         // take in a message with an id and userID, and update the content of the message IF the userID matches the one in the DB
-
-        $messageID;
+        $messageID = $message->messageID;
         $error = false;
         $userID = $message->poster;
         $content = $message->content;
@@ -191,10 +200,6 @@ class Messenger {
                     }
                 }
                 $stmt->close();
-            }
-
-            else {
-                $error = true;
             }
         }
         else {
