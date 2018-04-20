@@ -6,53 +6,104 @@
         .controller('MessageBoxController', MessageBoxController)
         .directive("autoGrow", AutoGrowDirective);
 
-    MessageBoxController.inject = ['$rootScope', '$scope', 'userservice', 'messageservice', 'Message'];
-    function MessageBoxController($rootScope, $scope, userservice, messageservice, Message) {
+    MessageBoxController.inject = ['$scope', 'userservice', 'messageservice', 'Message', 'modalservice'];
+    function MessageBoxController($scope, userservice, messageservice, Message, modalservice) {
         var vm = this;
         vm.message = new Message({ poster: userservice.user.userId });
         vm.messageContent = "";
-        vm.error = false;
-        vm.postMessage = postMessage;
-        vm.mentionUser = mentionUser;
-        vm.quoteMessage = quoteMessage;
+        vm.mentions = [];
+        vm.editing = false;
+        vm.post = post;
+        vm.mention = mention;
+        vm.quote = quote;
+        vm.edit = edit;
         vm.shiftEnter = shiftEnter;
+        vm.removeMention = removeMention;
+        vm.displayName = userservice.displayName;
 
+        $scope.$on("quoteMessage", vm.quote);
+        $scope.$on("mentionUser", vm.mention);
+        $scope.$on("editMessage", vm.edit);
         ////////////////
 
-        function postMessage() {
+        function post() {
             vm.message.poster = userservice.user.userId;
             vm.message.content = vm.messageContent;
-            messageservice.post(vm.message)
-                .then(
-                    function (response) {
-                        if (response.success === true) {
-                            vm.error = false;
-                            vm.messageContent = "";
-                            vm.message.messageID = response.messageID;
-                            messageservice.messages.push(vm.message);
-                            vm.message = new Message(poster = userservice.user.userId);
-                            messageservice.load();
-                        }
-                    })
-                .catch(
-                    function (response) {
-                        vm.error = true;
-                    });
+            vm.message.mentions = vm.mentions;
+            if (vm.editing === true) {
+                messageservice.edit(vm.message)
+                    .then(
+                        function (response) {
+                            if (response.success === true) {
+                                vm.editing = false;
+                                vm.messageContent = "";
+                                vm.mentions = [];
+                                vm.message.messageID = response.messageID;
+                                messageservice.messages.push(vm.message);
+                                vm.message = new Message(poster = userservice.user.userID);
+                                messageservice.load();
+                            }
+                            else {
+                                modalservice.openGeneralModal('Error', 'Please try again.');
+                            }
+                        })
+                    .catch(
+                        function (response) {
+                            //error
+                        });
+            }
+            else {
+                messageservice.post(vm.message)
+                    .then(
+                        function (response) {
+                            if (response.success === true) {
+                                vm.editing = false;
+                                vm.messageContent = "";
+                                vm.mentions = [];
+                                vm.message.messageID = response.messageID;
+                                messageservice.messages.push(vm.message);
+                                vm.message = new Message(poster = userservice.user.userID);
+                                messageservice.load();
+                            }
+                        })
+                    .catch(
+                        function (response) {
+                            //error
+                        });
+            }
+
         }
 
-        function mentionUser(id) {
-            vm.message.mentionUser(id);
+        function mention(event, poster) {
+            if (vm.mentions.indexOf(poster) === -1 && poster !== userservice.user.userID) {
+                vm.mentions.push(poster);
+            }
         }
 
-        function quoteMessage(message) {
-            vm.message.content = "[QUOTE]" + message.content + "[/QUOTE]\n" + vm.message.content;
-            vm.mentionUser(message.poster);
+        function quote(event, message) {
+            vm.mention(null, message.poster);
+            vm.messageContent = "[QUOTE]" + userservice.displayName(message.poster) + " said:\n" + message.content + "[/QUOTE]\n------------\n\n" + vm.messageContent;
+
+        }
+
+        function edit(event, message) {
+            vm.message = new Message(message);
+            vm.messageContent = message.content;
+            vm.mentions = message.mentions;
+            vm.editing = true;
         }
 
         function shiftEnter($event) {
             if ($event.keyCode === 13 && !$event.shiftKey) {
                 $event.preventDefault();
-                vm.postMessage();
+                vm.post();
+            }
+        }
+
+        function removeMention(mention) {
+            var index = vm.mentions.indexOf(mention);
+            if (index !== -1) {
+                vm.mentions.splice(index, 1);
             }
         }
     }

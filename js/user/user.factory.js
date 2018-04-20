@@ -6,7 +6,10 @@
         .factory('User', User);
 
     function User() {
-        function UserConstructor(args = {}) {
+        function UserConstructor(args) {
+            if (typeof (args) == 'undefined') {
+                args = {};
+            }
             var user = this;
             user = {
                 userID: args.userID || null,

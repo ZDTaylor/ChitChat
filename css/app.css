@@ -64,7 +64,7 @@ html {
 }
 .dropdown .btn:focus {
     background: gray;
-    color:gray;
+    color:white;
 }
 
 .dropdown-item {
@@ -107,6 +107,18 @@ html {
 
 .cc-messagebox textarea.form-control {
     height: 32px;
+    resize: none;
+}
+
+.cc-messagebox-mentions {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+}
+
+.cc-messagebox-mentions button {
+    width: 100%;
 }
 
 /* Message styling */
@@ -123,15 +135,49 @@ html {
   flex-direction: column;
 }
 
-.cc-message-content {
+.cc-message-area {
     justify-content: center;
-}
-
-.cc-message-content > pre {
-    margin: 0px;
 }
 
 .cc-message-votes {
     justify-content: center;
     text-align: center;
+}
+
+.cc-message-content {
+    display: block;
+    padding: 9.5px;
+    margin: 0px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: normal;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    white-space: pre-wrap;
+}
+
+.cc-vote {
+    font-size: 30px;
+}
+
+.cc-message-quote{
+    font-style: italic !important;
+    font-weight: normal !important;
+}
+
+.cc-message-mention {
+    font-weight: bold !important;
+    background-color: #d9edf7 !important;
+}
+
+.cc-blue {
+        color: blue !important;
+}
+
+.cc-red {
+    color: red !important;
 }

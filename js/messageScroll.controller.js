@@ -5,20 +5,28 @@
         .module('app')
         .controller('MessageScrollController', MessageScrollController);
 
-    MessageScrollController.inject = ['userservice', 'messageservice', '$interval', 'Message', '$scope'];
-    function MessageScrollController(userservice, messageservice, $interval, Message, $scope) {
+    MessageScrollController.inject = ['userservice', 'messageservice', '$interval', 'Message', '$scope', '$rootScope', 'modalservice'];
+    function MessageScrollController(userservice, messageservice, $interval, Message, $scope, $rootScope, modalservice) {
         var vm = this;
         vm.userservice = userservice;
-        vm.load = loadMessages;
-        vm.displayName = displayName;
+        vm.load = load;
+        vm.displayName = userservice.displayName;
+        vm.like = like;
+        vm.dislike = dislike;
+        vm.remove = remove;
+        vm.ban = ban;
+        vm.suspend = suspend;
+        vm.quote = quote;
+        vm.mention = mention;
+        vm.edit = edit;
         vm.messages = [];
 
         vm.load();
 
         ////////////////
 
-        function loadMessages() {
-            if (typeof (EventSource) === "undefined") { //Polling
+        function load() {
+            if (true) {//typeof (EventSource) === "undefined") { //Polling
                 $interval(function () {
                     messageservice.load()
                         .then(
@@ -65,6 +73,7 @@
                     $scope.$apply(function () {
                         var response = angular.fromJson(event.data);
                         if (response.success == true) {
+                            console.log(response);
                             var j = 0;
                             for (var i = 0; i < response.messages.length; i++) {
 
@@ -98,15 +107,108 @@
             }
         }
 
-        function displayName(userID) {
-            // https://gist.github.com/endel/321925f6cafa25bbfbde
-            Number.prototype.pad = function (size) {
-                var s = String(this);
-                while (s.length < (size || 2)) { s = "0" + s; }
-                return s;
-            }
+        function like(message) {
+            messageservice.like(message.messageID)
+                .then(function (response) {
+                    if (response.success) {
+                        // success
+                    }
+                    else {
+                        modalservice.openGeneralModal('Error', 'Please try again.');
+                    }
+                })
+                .catch(function (response) {
+                    modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
+                });
+        }
 
-            return "Anonymous#" + userID.pad(8);
+        function dislike(message) {
+            messageservice.dislike(message.messageID)
+                .then(function (response) {
+                    if (response.success) {
+                        //success
+                    }
+                    else {
+                        modalservice.openGeneralModal('Error', 'Please try again.');
+                    }
+                })
+                .catch(function (response) {
+                    modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
+                });
+        }
+
+        function remove(message) {
+            var modal = modalservice.openConfirmModal('Are you sure?', 'Deleting a message cannot be undone.');
+
+            modal.result
+                .then(function (response) {
+                    messageservice.remove(message.messageID)
+                        .then(function (response) {
+                            if (response.success) {
+                                //success
+                            }
+                            else {
+                                modalservice.openGeneralModal('Error', 'Please try again.');
+                            }
+                        })
+                        .catch(function (response) {
+                            modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
+                        });
+                });
+        }
+
+        function ban(message) {
+            var modal = modalservice.openConfirmModal('Are you sure?', 'Banning a user is a serious action that should not be taken lightly.  This action cannot be undone.');
+
+            modal.result
+                .then(function (response) {
+                    userservice.ban(message.poster)
+                        .then(function (response) {
+                            if (response.success) {
+                                modalservice.openGeneralModal('Success', 'The user is now banned.');
+                            }
+                            else {
+                                modalservice.openGeneralModal('Error', 'Please try again.');
+                            }
+                        })
+                        .catch(function (response) {
+                            modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
+                        });
+                });
+        }
+
+        function suspend(message) {
+            var modal = modalservice.openSuspendModal();
+
+            modal.result
+                .then(function (response) {
+                    var datetime = new Date(Date.UTC(response.date.getFullYear(), response.date.getMonth(), response.date.getDate()));
+                    datetime = Math.floor(datetime.getTime() / 1000);
+                    userservice.suspend(message.poster, datetime)
+                        .then(function (response) {
+                            if (response.success) {
+                                modalservice.openGeneralModal('Success', 'The user is now suspended.');
+                            }
+                            else {
+                                modalservice.openGeneralModal('Error', 'Please try again.');
+                            }
+                        })
+                        .catch(function (response) {
+                            modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
+                        });
+                });
+        }
+
+        function quote(message) {
+            $rootScope.$broadcast("quoteMessage", message);
+        }
+
+        function mention(message) {
+            $rootScope.$broadcast("mentionUser", message.poster);
+        }
+
+        function edit(message) {
+            $rootScope.$broadcast("editMessage", message);
         }
     }
 })();

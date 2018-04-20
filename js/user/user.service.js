@@ -16,7 +16,8 @@
             resetPasswordReset: resetPasswordReset,
             deleteAccount: deleteAccount,
             ban: ban,
-            suspend: suspend
+            suspend: suspend,
+            displayName: displayName
         };
 
         return service;
@@ -36,6 +37,7 @@
                     function (response) {
                         if (response.success == true) {
                             service.user = new User(response.user);
+                            response.user.suspended = new Date(response.user.suspended);
                         }
                         return response;
                     });
@@ -79,16 +81,27 @@
                     });
         }
 
-        function ban(userid) {
+        function ban(userID) {
             var Ban = $resource(apiUrl + 'ban.php');
 
-            return Ban.save({ userid: userid }).$promise;
+            return Ban.save({ userID: userID }).$promise;
         }
 
-        function suspend(userid, datetime) {
+        function suspend(userID, datetime) {
             var Suspend = $resource(apiUrl + 'suspend.php');
 
-            return Suspend.save({ userid: userid, datetime: datetime }).$promise;
+            return Suspend.save({ userID: userID, datetime: datetime }).$promise;
+        }
+
+        function displayName(userID) {
+            // https://gist.github.com/endel/321925f6cafa25bbfbde
+            Number.prototype.pad = function (size) {
+                var s = String(this);
+                while (s.length < (size || 2)) { s = "0" + s; }
+                return s;
+            }
+
+            return "Anonymous#" + userID.pad(8);
         }
     }
 })();

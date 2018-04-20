@@ -3,6 +3,7 @@
 
     angular.module('app.core', [
         'ngAnimate',
+        'ngSanitize',
         'ui.bootstrap'
     ]);
 })();
