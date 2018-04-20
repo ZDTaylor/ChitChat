@@ -98,6 +98,9 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="well" ng-controller="MessageScrollController as messageScroll" ng-cloak>
+                    <div ng-if="messageScroll.messages.length <= 1 && messageScroll.showFallback === true">
+                        <div class="alert alert-danger" role="alert" ng-click="messageScroll.fallbackEnable()">Messages not loading? Click here to try a different way.</div>
+                    </div>
                     <div class="panel panel-default" ng-repeat="message in messageScroll.messages | orderBy: message.messageID">
                         <div class="panel-heading">
                             <div class="dropdown">

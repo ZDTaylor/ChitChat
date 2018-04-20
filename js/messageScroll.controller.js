@@ -5,8 +5,8 @@
         .module('app')
         .controller('MessageScrollController', MessageScrollController);
 
-    MessageScrollController.inject = ['userservice', 'messageservice', '$interval', 'Message', '$scope', '$rootScope', 'modalservice'];
-    function MessageScrollController(userservice, messageservice, $interval, Message, $scope, $rootScope, modalservice) {
+    MessageScrollController.inject = ['userservice', 'messageservice', '$interval', 'Message', '$scope', '$rootScope', 'modalservice', '$timeout'];
+    function MessageScrollController(userservice, messageservice, $interval, Message, $scope, $rootScope, modalservice, $timeout) {
         var vm = this;
         vm.userservice = userservice;
         vm.load = load;
@@ -20,13 +20,23 @@
         vm.mention = mention;
         vm.edit = edit;
         vm.messages = [];
+        vm.fallback = false;
+        vm.showFallback = false;
+        vm.fallbackEnable = fallbackEnable;
+
+        $timeout(function () {
+            vm.showFallback = true;
+        }, 5000);
 
         vm.load();
 
         ////////////////
 
         function load() {
-            if (true) {//typeof (EventSource) === "undefined") { //Polling
+            if (typeof (EventSource) === "undefined" || vm.fallback === true) { //Polling
+                if (typeof (vm.source) !== "undefined") {
+                    vm.source.target.close();
+                }
                 $interval(function () {
                     messageservice.load()
                         .then(
@@ -73,7 +83,6 @@
                     $scope.$apply(function () {
                         var response = angular.fromJson(event.data);
                         if (response.success == true) {
-                            console.log(response);
                             var j = 0;
                             for (var i = 0; i < response.messages.length; i++) {
 
@@ -209,6 +218,11 @@
 
         function edit(message) {
             $rootScope.$broadcast("editMessage", message);
+        }
+
+        function fallbackEnable() {
+            vm.fallback = true;
+            vm.load();
         }
     }
 })();
