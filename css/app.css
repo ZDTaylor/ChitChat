@@ -107,6 +107,18 @@ html {
 
 .cc-messagebox textarea.form-control {
     height: 32px;
+    resize: none;
+}
+
+.cc-messagebox-mentions {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+}
+
+.cc-messagebox-mentions button {
+    width: 100%;
 }
 
 /* Message styling */
@@ -139,13 +151,13 @@ html {
     font-size: 13px;
     line-height: 1.42857143;
     color: #333;
-    word-break: break-all;
+    word-break: normal;
     word-wrap: break-word;
     background-color: #f5f5f5;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-    white-space: pre;
+    white-space: pre-wrap;
 }
 
 .cc-vote {

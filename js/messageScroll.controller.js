@@ -5,25 +5,28 @@
         .module('app')
         .controller('MessageScrollController', MessageScrollController);
 
-    MessageScrollController.inject = ['userservice', 'messageservice', '$interval', 'Message', '$scope', 'modalservice'];
-    function MessageScrollController(userservice, messageservice, $interval, Message, $scope, modalservice) {
+    MessageScrollController.inject = ['userservice', 'messageservice', '$interval', 'Message', '$scope', '$rootScope', 'modalservice'];
+    function MessageScrollController(userservice, messageservice, $interval, Message, $scope, $rootScope, modalservice) {
         var vm = this;
         vm.userservice = userservice;
-        vm.load = loadMessages;
+        vm.load = load;
         vm.displayName = userservice.displayName;
-        vm.likeMessage = likeMessage;
-        vm.dislikeMessage = dislikeMessage;
-        vm.deleteMessage = deleteMessage;
+        vm.like = like;
+        vm.dislike = dislike;
+        vm.remove = remove;
         vm.ban = ban;
         vm.suspend = suspend;
+        vm.quote = quote;
+        vm.mention = mention;
+        vm.edit = edit;
         vm.messages = [];
 
         vm.load();
 
         ////////////////
 
-        function loadMessages() {
-            if (typeof (EventSource) === "undefined") { //Polling
+        function load() {
+            if (true) {//typeof (EventSource) === "undefined") { //Polling
                 $interval(function () {
                     messageservice.load()
                         .then(
@@ -70,6 +73,7 @@
                     $scope.$apply(function () {
                         var response = angular.fromJson(event.data);
                         if (response.success == true) {
+                            console.log(response);
                             var j = 0;
                             for (var i = 0; i < response.messages.length; i++) {
 
@@ -103,7 +107,7 @@
             }
         }
 
-        function likeMessage(message) {
+        function like(message) {
             messageservice.like(message.messageID)
                 .then(function (response) {
                     if (response.success) {
@@ -118,7 +122,7 @@
                 });
         }
 
-        function dislikeMessage(message) {
+        function dislike(message) {
             messageservice.dislike(message.messageID)
                 .then(function (response) {
                     if (response.success) {
@@ -133,7 +137,7 @@
                 });
         }
 
-        function deleteMessage(message) {
+        function remove(message) {
             var modal = modalservice.openConfirmModal('Are you sure?', 'Deleting a message cannot be undone.');
 
             modal.result
@@ -193,6 +197,18 @@
                             modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
                         });
                 });
+        }
+
+        function quote(message) {
+            $rootScope.$broadcast("quoteMessage", message);
+        }
+
+        function mention(message) {
+            $rootScope.$broadcast("mentionUser", message.poster);
+        }
+
+        function edit(message) {
+            $rootScope.$broadcast("editMessage", message);
         }
     }
 })();

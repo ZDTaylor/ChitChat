@@ -109,17 +109,19 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
                                         <li>
-                                            <button type="button" class="btn btn-default">Mention</button>
+                                            <button type="button" class="btn btn-default" ng-if="messageScroll.userservice.user.userID !== message.poster" ng-click="messageScroll.mention(message)">Mention</button>
                                         </li>
                                         <li>
-                                            <button type="button" class="btn btn-default">Quote</button>
+                                            <button type="button" class="btn btn-default" ng-click="messageScroll.quote(message)">Quote</button>
                                         </li>
-                                        <li role="separator" class="divider" ng-if="messageScroll.userservice.user.isAdmin"></li>
+                                        <li role="separator" class="divider" ng-if="messageScroll.userservice.user.isAdmin && messageScroll.userservice.user.userID !== message.poster"></li>
                                         <li>
-                                            <button type="button" class="btn btn-default" ng-if="messageScroll.userservice.user.isAdmin" ng-click="messageScroll.ban(message)">Ban</button>
+                                            <button type="button" class="btn btn-default" ng-if="messageScroll.userservice.user.isAdmin && messageScroll.userservice.user.userID !== message.poster"
+                                                ng-click="messageScroll.ban(message)">Ban</button>
                                         </li>
                                         <li>
-                                            <button type="button" class="btn btn-default" ng-if="messageScroll.userservice.user.isAdmin" ng-click="messageScroll.suspend(message)">Suspend</button>
+                                            <button type="button" class="btn btn-default" ng-if="messageScroll.userservice.user.isAdmin && messageScroll.userservice.user.userID !== message.poster"
+                                                ng-click="messageScroll.suspend(message)">Suspend</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -129,21 +131,21 @@
                             <div class="row row-eq-height">
                                 <div class="col-xs-11 cc-message-area">
                                     <div class="cc-message-content" ng-class="{'cc-message-mention': message.mentions.indexOf(messageScroll.userservice.user.userID) !== -1}"
-                                        ng-bind="message.content"></div>
+                                        ng-bind-html="message.content"></div>
                                 </div>
                                 <div class="col-xs-1 cc-message-votes">
-                                    <span class="glyphicon glyphicon-chevron-up cc-vote" ng-class="{'cc-blue': message.reaction === 1}" ng-click="messageScroll.likeMessage(message)"></span>
+                                    <span class="glyphicon glyphicon-chevron-up cc-vote" ng-class="{'cc-blue': message.reaction === 1}" ng-click="messageScroll.like(message)"></span>
                                     <br>
                                     <span ng-bind="message.net_likes"></span>
                                     <br>
-                                    <span class="glyphicon glyphicon-chevron-down cc-vote" ng-class="{'cc-red': message.reaction === -1}" ng-click="messageScroll.dislikeMessage(message)"></span>
+                                    <span class="glyphicon glyphicon-chevron-down cc-vote" ng-class="{'cc-red': message.reaction === -1}" ng-click="messageScroll.dislike(message)"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="panel-footer" ng-if="messageScroll.userservice.user.userID === message.poster || messageScroll.userservice.user.isAdmin">
                             <div class="btn-group" role="group">
-                                <button type="button" class="btn btn-default" ng-if="messageScroll.userservice.user.userID === message.poster">Edit</button>
-                                <button type="button" class="btn btn-default" ng-click="messageScroll.deleteMessage(message)">Delete</button>
+                                <button type="button" class="btn btn-default" ng-if="messageScroll.userservice.user.userID === message.poster" ng-click="messageScroll.edit(message)">Edit</button>
+                                <button type="button" class="btn btn-default" ng-click="messageScroll.remove(message)">Delete</button>
                             </div>
                         </div>
                     </div>
@@ -154,20 +156,39 @@
 
     <nav id="cc-messageBox" class="navbar navbar-inverse navbar-fixed-bottom cc-messagebox" ng-controller="MessageBoxController as messageBox">
         <div class="container">
-            <form class="navbar-form" ng-submit="messageBox.postMessage()">
-                <div class="form-group">
-                    <div class="input-group">
-                        <!--<input class="form-control" name="Post message" placeholder="Type message here..." autocomplete="off" autofocus="autofocus" type="text" ng-model="messageBox.message.content">-->
-                        <textarea class="form-control" placeholder="Type message here..." autocomplete="off" autofocus="autofocus" ng-model="messageBox.messageContent"
-                            auto-grow ng-maxlength="10000" ng-keydown="messageBox.shiftEnter($event)"></textarea>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="submit">
-                                <span class="glyphicon glyphicon-send"></span>
-                            </button>
-                        </span>
+            <div class="row row-eq-height">
+                <div class="col-xs-2 cc-messagebox-mentions" ng-hide="messageBox.mentions.length === 0" ng-cloak>
+                    <div class="btn-group dropup" uib-dropdown auto-close="outsideClick" ng-hide="messageBox.mentions.length === 0" ng-cloak>
+                        <button id="mentions-dropdown" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                            Mentions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+                            <li role="menuitem" ng-repeat="mention in messageBox.mentions">
+                                <button type="button" class="btn btn-default" ng-click="messageBox.removeMention(mention)">
+                                    <span ng-bind="messageBox.displayName(mention)"></span>
+                                    <span>&times;</span>
+                                </button>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </form>
+                <div ng-class="{'col-xs-12' : messageBox.mentions.length === 0, 'col-xs-10': messageBox.mentions.length !== 0}">
+                    <form class="navbar-form" ng-submit="messageBox.post()">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <textarea class="form-control" placeholder="Type message here..." autocomplete="off" autofocus="autofocus" ng-model="messageBox.messageContent"
+                                    auto-grow ng-maxlength="10000" ng-keydown="messageBox.shiftEnter($event)"></textarea>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">
+                                        <span class="glyphicon glyphicon-send"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -243,6 +264,7 @@
     <script src="js/vendor/angular.js"></script>
     <script src="js/vendor/angular-resource.js"></script>
     <script src="js/vendor/angular-animate.js"></script>
+    <script src="js/vendor/angular-sanitize.min.js"></script>
     <script src="js/vendor/ui-bootstrap-tpls-2.5.0.js"></script>
 
     <!-- Unomment the following before final upload to reduce file size -->
@@ -251,6 +273,7 @@
     <script src="js/vendor/angular.min.js"></script>
     <script src="js/vendor/angular-resource.js"></script>
     <script src="js/vendor/angular-animate.min.js"></script>
+    <script src="js/vendor/angular-sanitize.min.js"></script>
     <script src="js/vendor/ui-bootstrap-tpls-2.5.0.min.js"></script>
     -->
 

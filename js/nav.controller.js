@@ -66,12 +66,12 @@
                                 vm.logout();
                             }
                             else {
-                                modalservice.openGeneralModal('Error', 'Please check your email and username, and try again.');
+                                modalservice.openGeneralModal('Error', 'Please check your email and password, and try again.');
                             }
 
                         }
                         else {
-                            if (!suppress) { modalservice.openGeneralModal('Error', 'Please check your email and username, and try again.'); }
+                            if (!suppress) { modalservice.openGeneralModal('Error', 'Please check your email and password, and try again.'); }
                         }
                     })
                 .catch(
