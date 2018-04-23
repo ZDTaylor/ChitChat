@@ -31,7 +31,7 @@
                             modalservice.openGeneralModal('Success', 'Please log in now.');
                         }
                         else {
-                            modalservice.openGeneralModal('Error', 'Please try again.');
+                            modalservice.openGeneralModal('Error', 'Please make sure you have input an email and password and try again.');
                         }
                     })
                 .catch(
@@ -111,6 +111,7 @@
                                 vm.user = userservice.user;
                                 vm.dropdownMessage = "Login";
                                 vm.dropdownIsOpen = false;
+                                modalservice.openGeneralModal('Success', 'We\'re sorry to see you go.  Remember us if your other chat application doesn\'t satisfy you.');
                             }
                             else {
                                 modalservice.openGeneralModal('Error', 'Please try again.');
@@ -132,7 +133,7 @@
                             modalservice.openGeneralModal('Success', 'Please check your email for instructions on resetting your password. (Allow up to 30 minutes).');
                         }
                         else {
-                            modalservice.openGeneralModal('Error', 'Please try again.');
+                            modalservice.openGeneralModal('Error', 'Please make sure you have put in your email and try again.');
                         }
                     })
                 .catch(

@@ -15,18 +15,45 @@
     <title>Chit Chat</title>
     <meta name="description" content="An anonymous chat application for the 21st century">
 
-    <!-- Comment the following before final upload to reduce file size -->
-    <link rel="stylesheet" href="css/vendor/bootstrap.css">
-    <link rel="stylesheet" href="css/vendor/bootstrap-theme.css">
-
-    <!-- Uncomment the following before final upload to reduce file size -->
-    <!--
+    <!--  Vendor stylesheets for base -->
     <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
     <link rel="stylesheet" href="css/vendor/bootstrap-theme.min.css">
-    -->
 
     <!-- Custom stylesheet for Chit Chat -->
     <link rel="stylesheet" href="css/app.css">
+
+    <!-- Vendor JavaScript for base-->
+    <script src="js/vendor/jQuery.min.js" defer></script>
+    <script src="js/vendor/angular.min.js" defer></script>
+    <script src="js/vendor/angular-resource.js" defer></script>
+    <script src="js/vendor/angular-animate.min.js" defer></script>
+    <script src="js/vendor/angular-sanitize.min.js" defer></script>
+    <script src="js/vendor/ui-bootstrap-tpls-2.5.0.min.js" defer></script>
+
+    <!-- ChitChat components-->
+
+    <!-- Core module, controllers, and services -->
+    <script src="js/core/core.module.js" defer></script>
+    <script src="js/core/modal.service.js" defer></script>
+    <script src="js/core/modalInstance.controller.js" defer></script>
+
+    <!-- User module, controllers, and services -->
+    <script src="js/user/users.module.js" defer></script>
+    <script src="js/user/user.factory.js" defer></script>
+    <script src="js/user/user.service.js" defer></script>
+
+    <!-- Message module, controllers, and services -->
+    <script src="js/message/messages.module.js" defer></script>
+    <script src="js/message/message.factory.js" defer></script>
+    <script src="js/message/message.service.js" defer></script>
+
+    <!-- Main module, controllers, and services -->
+    <script src="js/app.module.js" defer></script>
+    <script src="js/constants.js" defer></script>
+    <script src="js/nav.controller.js" defer></script>
+    <script src="js/messageScroll.controller.js" defer></script>
+    <script src="js/messageBox.controller.js" defer></script>
+    <script src="js/resetPassword.controller.js" defer></script>
 
 </head>
 
@@ -63,7 +90,7 @@
                         <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
                             <li class="dropdown-header" ng-if="nav.user.userID === null">Email</li>
                             <div class="input-group" ng-if="nav.user.userID === null">
-                                <input type="text" class="form-control" placeholder="Enter email" ng-model="nav.email">
+                                <input type="email" class="form-control" placeholder="Enter email" ng-model="nav.email" ng-required="true">
                             </div>
                             <li class="dropdown-header" ng-if="nav.user.userID === null">Password</li>
                             <div class="input-group" ng-if="nav.user.userID === null">
@@ -98,6 +125,9 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="well" ng-controller="MessageScrollController as messageScroll" ng-cloak>
+                    <div ng-if="messageScroll.messages.length <= 1 && messageScroll.showFallback === true">
+                        <div class="alert alert-danger" role="alert" ng-click="messageScroll.fallbackEnable()">Messages not loading? Click here to try a different way.</div>
+                    </div>
                     <div class="panel panel-default" ng-repeat="message in messageScroll.messages | orderBy: message.messageID">
                         <div class="panel-heading">
                             <div class="dropdown">
@@ -258,48 +288,6 @@
 
     <div ng-controller="ResetPasswordController as reset"></div>
 
-
-    <!-- Comment the following before final upload to reduce file size -->
-    <script src="js/vendor/jQuery.min.js"></script>
-    <script src="js/vendor/angular.js"></script>
-    <script src="js/vendor/angular-resource.js"></script>
-    <script src="js/vendor/angular-animate.js"></script>
-    <script src="js/vendor/angular-sanitize.min.js"></script>
-    <script src="js/vendor/ui-bootstrap-tpls-2.5.0.js"></script>
-
-    <!-- Unomment the following before final upload to reduce file size -->
-    <!--
-    <script src="js/vendor/jQuery.min.js"></script>
-    <script src="js/vendor/angular.min.js"></script>
-    <script src="js/vendor/angular-resource.js"></script>
-    <script src="js/vendor/angular-animate.min.js"></script>
-    <script src="js/vendor/angular-sanitize.min.js"></script>
-    <script src="js/vendor/ui-bootstrap-tpls-2.5.0.min.js"></script>
-    -->
-
-    <!-- Custom angular app code for Chit Chat
-         app.module.js must be loaded after other app modules.
-         app modules must be loaded before any services that depend on them.
-    -->
-    <script src="js/core/core.module.js"></script>
-    <script src="js/core/modal.service.js"></script>
-    <script src="js/core/modalInstance.controller.js"></script>
-
-    <script src="js/user/users.module.js"></script>
-    <script src="js/user/user.factory.js"></script>
-    <script src="js/user/user.service.js"></script>
-
-    <script src="js/message/messages.module.js"></script>
-    <script src="js/message/message.factory.js"></script>
-    <script src="js/message/message.service.js"></script>
-
-    <script src="js/app.module.js"></script>
-    <script src="js/constants.js"></script>
-
-    <script src="js/nav.controller.js"></script>
-    <script src="js/messageScroll.controller.js"></script>
-    <script src="js/messageBox.controller.js"></script>
-    <script src="js/resetPassword.controller.js"></script>
 </body>
 
 </html>
