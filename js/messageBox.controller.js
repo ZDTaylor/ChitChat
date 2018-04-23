@@ -44,12 +44,12 @@
                                 messageservice.load();
                             }
                             else {
-                                modalservice.openGeneralModal('Error', 'Please try again.');
+                                modalservice.openGeneralModal('Error', 'Please check your message and try again.');
                             }
                         })
                     .catch(
                         function (response) {
-                            //error
+                            modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
                         });
             }
             else {
@@ -65,10 +65,13 @@
                                 vm.message = new Message(poster = userservice.user.userID);
                                 messageservice.load();
                             }
+                            else {
+                                modalservice.openGeneralModal('Error', 'Please check your message and try again.');
+                            }
                         })
                     .catch(
                         function (response) {
-                            //error
+                            modalservice.openGeneralModal('Server Error', 'Please try again. If the issue persists, please try again later');
                         });
             }
 

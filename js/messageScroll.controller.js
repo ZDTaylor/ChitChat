@@ -42,38 +42,8 @@
                         .then(
                             function (response) {
                                 if (response.success === true) {
-                                    var j = 0;
-                                    for (var i = 0; i < messageservice.messages.length; i++) {
-
-                                        // in vm but not messageservice -> delete
-                                        // in both -> update
-                                        // in messageservice but not bm -> add
-                                        if (j < vm.messages.length && messageservice.messages[i].messageID === vm.messages[j].messageID) {
-                                            vm.messages[j].content = messageservice.messages[i].content;
-                                            vm.messages[j].mentions = messageservice.messages[i].mentions;
-                                            vm.messages[j].net_likes = messageservice.messages[i].net_likes;
-                                            vm.messages[j].reaction = messageservice.messages[i].reaction;
-                                        }
-                                        else if (j < vm.messages.length && messageservice.messages[i].messageID !== vm.messages[j].messageID) {
-                                            do {
-                                                vm.messages.splice(j, 1);
-                                            } while (messageservice.messages[i].messageID !== vm.messages[j].messageID);
-                                            vm.messages[j].content = messageservice.messages[i].content;
-                                            vm.messages[j].mentions = messageservice.messages[i].mentions;
-                                            vm.messages[j].net_likes = messageservice.messages[i].net_likes;
-                                            vm.messages[j].reaction = messageservice.messages[i].reaction;
-                                        }
-                                        else {
-                                            var message = new Message(messageservice.messages[i]);
-                                            vm.messages.push(message);
-                                        }
-                                        j++;
-                                    }
+                                    updateMessageArray(response);
                                 }
-                            })
-                        .catch(
-                            function (response) {
-
                             });
                 }, 1000);
             }
@@ -83,33 +53,7 @@
                     $scope.$apply(function () {
                         var response = angular.fromJson(event.data);
                         if (response.success == true) {
-                            var j = 0;
-                            for (var i = 0; i < response.messages.length; i++) {
-
-                                // in vm but not messageservice -> delete
-                                // in both -> update
-                                // in messageservice but not bm -> add
-                                if (j < vm.messages.length && response.messages[i].messageID === vm.messages[j].messageID) {
-                                    vm.messages[j].content = response.messages[i].content;
-                                    vm.messages[j].mentions = response.messages[i].mentions;
-                                    vm.messages[j].net_likes = response.messages[i].net_likes;
-                                    vm.messages[j].reaction = response.messages[i].reaction;
-                                }
-                                else if (j < vm.messages.length && response.messages[i].messageID !== vm.messages[j].messageID) {
-                                    do {
-                                        vm.messages.splice(j, 1);
-                                    } while (response.messages[i].messageID !== vm.messages[j].messageID);
-                                    vm.messages[j].content = response.messages[i].content;
-                                    vm.messages[j].mentions = response.messages[i].mentions;
-                                    vm.messages[j].net_likes = response.messages[i].net_likes;
-                                    vm.messages[j].reaction = response.messages[i].reaction;
-                                }
-                                else {
-                                    var message = new Message(response.messages[i]);
-                                    vm.messages.push(message);
-                                }
-                                j++;
-                            }
+                            updateMessageArray(response);
                         }
                     });
                 };
@@ -119,10 +63,7 @@
         function like(message) {
             messageservice.like(message.messageID)
                 .then(function (response) {
-                    if (response.success) {
-                        // success
-                    }
-                    else {
+                    if (!response.success) {
                         modalservice.openGeneralModal('Error', 'Please try again.');
                     }
                 })
@@ -134,10 +75,7 @@
         function dislike(message) {
             messageservice.dislike(message.messageID)
                 .then(function (response) {
-                    if (response.success) {
-                        //success
-                    }
-                    else {
+                    if (!response.success) {
                         modalservice.openGeneralModal('Error', 'Please try again.');
                     }
                 })
@@ -153,10 +91,7 @@
                 .then(function (response) {
                     messageservice.remove(message.messageID)
                         .then(function (response) {
-                            if (response.success) {
-                                //success
-                            }
-                            else {
+                            if (!response.success) {
                                 modalservice.openGeneralModal('Error', 'Please try again.');
                             }
                         })
@@ -223,6 +158,36 @@
         function fallbackEnable() {
             vm.fallback = true;
             vm.load();
+        }
+
+        function updateMessageArray(response) {
+            var j = 0;
+            for (var i = 0; i < response.messages.length; i++) {
+
+                // in vm but not messageservice -> delete
+                // in both -> update
+                // in messageservice but not bm -> add
+                if (j < vm.messages.length && response.messages[i].messageID === vm.messages[j].messageID) {
+                    vm.messages[j].content = response.messages[i].content;
+                    vm.messages[j].mentions = response.messages[i].mentions;
+                    vm.messages[j].net_likes = response.messages[i].net_likes;
+                    vm.messages[j].reaction = response.messages[i].reaction;
+                }
+                else if (j < vm.messages.length && response.messages[i].messageID !== vm.messages[j].messageID) {
+                    do {
+                        vm.messages.splice(j, 1);
+                    } while (response.messages[i].messageID !== vm.messages[j].messageID);
+                    vm.messages[j].content = response.messages[i].content;
+                    vm.messages[j].mentions = response.messages[i].mentions;
+                    vm.messages[j].net_likes = response.messages[i].net_likes;
+                    vm.messages[j].reaction = response.messages[i].reaction;
+                }
+                else {
+                    var message = new Message(response.messages[i]);
+                    vm.messages.push(message);
+                }
+                j++;
+            }
         }
     }
 })();
