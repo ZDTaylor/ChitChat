@@ -90,7 +90,7 @@
                         <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
                             <li class="dropdown-header" ng-if="nav.user.userID === null">Email</li>
                             <div class="input-group" ng-if="nav.user.userID === null">
-                                <input type="text" class="form-control" placeholder="Enter email" ng-model="nav.email">
+                                <input type="email" class="form-control" placeholder="Enter email" ng-model="nav.email" ng-required="true">
                             </div>
                             <li class="dropdown-header" ng-if="nav.user.userID === null">Password</li>
                             <div class="input-group" ng-if="nav.user.userID === null">
