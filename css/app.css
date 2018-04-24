@@ -1,3 +1,6 @@
+/*
+Bootstrap overrides/fixes
+*/
 @font-face {
     font-family: 'Glyphicons Halflings';
 
@@ -5,22 +8,176 @@
     src: url('../fonts/vendor/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/vendor/glyphicons-halflings-regular.woff2') format('woff2'), url('../fonts/vendor/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/vendor/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/vendor/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 
-body { padding-top: 50px; }
+body {
+    padding-top: 52px;
+    padding-bottom: 50px;
+}
 
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 
-.full-height {
-    height: 100%;
-    min-height: 100%;
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
 }
 
-.chat-window {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0px;
+/*
+ChitChat styling
+*/
+
+html {
+    overflow-x: hidden;
 }
 
+
+
+/* Top navbar styling */
 .navbar-right {
     margin-right:0px;
+}
+
+.dropdown {
+    list-style: none;
+    background: black;
+    padding: 1.5px;
+    display: inline-block;
+}
+
+.dropdown .nav-link {
+    color:#fff;
+    text-decoration: none;
+}
+
+.dropdown .btn {
+    background: gray;
+    color:#fff;
+
+}
+
+.dropdown .btn:hover {
+    background: black;
+    color: whitesmoke;
+}
+
+.dropdown .btn:active {
+    background: gray;
+    color:gray;
+
+}
+.dropdown .btn:focus {
+    background: gray;
+    color:white;
+}
+
+.dropdown-item {
+    display: inline-block;
+    width: 100%;
+    padding: 10px 5px;
+}
+
+.dropdown-menu a {
+    color: #000;
+    text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+    color: #fff;
+    background-color: #b91773;
+    border-color: #fff;
+}
+
+.dropdown-menu button {
+    width: 100%;
+}
+
+/* Messagebox styling */
+.cc-messagebox {
+    max-height: 25%;
+}
+
+.cc-messagebox .form-group {
+    display: inline;
+}
+
+.cc-messagebox .input-group {
+    display: table;
+}
+
+.cc-messagebox .input-group-btn {
+    width: 1% !important;
+}
+
+.cc-messagebox textarea.form-control {
+    height: 32px;
+    resize: none;
+}
+
+.cc-messagebox-mentions {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+}
+
+.cc-messagebox-mentions button {
+    width: 100%;
+}
+
+/* Message styling */
+.row.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.row.row-eq-height > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
+
+.cc-message-area {
+    justify-content: center;
+}
+
+.cc-message-votes {
+    justify-content: center;
+    text-align: center;
+}
+
+.cc-message-content {
+    display: block;
+    padding: 9.5px;
+    margin: 0px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: normal;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    white-space: pre-wrap;
+}
+
+.cc-vote {
+    font-size: 30px;
+}
+
+.cc-message-quote{
+    font-style: italic !important;
+    font-weight: normal !important;
+}
+
+.cc-message-mention {
+    font-weight: bold !important;
+    background-color: #d9edf7 !important;
+}
+
+.cc-blue {
+        color: blue !important;
+}
+
+.cc-red {
+    color: red !important;
 }

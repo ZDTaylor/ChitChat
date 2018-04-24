@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7 full-height"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 full-height"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 full-height"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" ng-app="app" class="no-js full-height">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="http://pluto.cse.msstate.edu/~dcsp03/ChitChat/" />
+
+    <title>Chit Chat</title>
+    <meta name="description" content="An anonymous chat application for the 21st century">
+
+    <!--  Vendor stylesheets for base -->
+    <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="css/vendor/bootstrap-theme.min.css">
+
+    <!-- Custom stylesheet for Chit Chat -->
+    <link rel="stylesheet" href="css/app.css">
+
+</head>
+
+<body>
+
+    <!--[if lt IE 7]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Navbar for the page -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+
+            <!-- Chit Chat icon -->
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <span class="glyphicon glyphicon-console"></span>
+                </a>
+            </div>
+
+            <!--Center align(Couldn't get this to work, I never could find a solution with CSS or html)-->
+            <div class="nav1 navbar-nav1 navbar-center">
+                <p class="navbar-text text-center"> Chit Chat </p>
+            </div>
+
+            <!--Right aligned Dropdown menu-->
+            <div class="nav navbar-nav navbar-right" ng-controller="NavController as nav" ng-cloak>
+                <div class="dropdown">
+                    <div class="btn-group btn-group-lg" role="group" uib-dropdown auto-close="outsideClick" is-open="nav.dropdownIsOpen">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" uib-dropdown-toggle>
+                            <span ng-bind="nav.dropdownMessage"></span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
+                            <li class="dropdown-header" ng-if="nav.user.userID === null">Email</li>
+                            <div class="input-group" ng-if="nav.user.userID === null">
+                                <input type="email" class="form-control" placeholder="Enter email" ng-model="nav.email" ng-required="true">
+                            </div>
+                            <li class="dropdown-header" ng-if="nav.user.userID === null">Password</li>
+                            <div class="input-group" ng-if="nav.user.userID === null">
+                                <input type="password" class="form-control" placeholder="Enter password" ng-model="nav.passwd">
+                            </div>
+                            <li ng-if="nav.user.userID === null">
+                                <button type="button" class="btn btn-default" ng-click="nav.login(false)">Login</button>
+                            </li>
+                            <li ng-if="nav.user.userID === null">
+                                <button type="button" class="btn btn-default" ng-click="nav.register()">Register</button>
+                            </li>
+                            <li role="separator" class="divider" ng-if="nav.user.userID === null"></li>
+                            <li ng-if="nav.user.userID === null">
+                                <a class="forgot-password" ng-click="nav.resetPasswordEmail()">Forgot password?</a>
+                            </li>
+
+                            <li ng-if="nav.user.userID !== null">
+                                <button type="button" class="btn btn-default" ng-click="nav.logout()">Logout</button>
+                            </li>
+                            <li ng-if="nav.user.userID !== null">
+                                <button type="button" class="btn btn-default" ng-click="nav.deleteAccount()">Delete Account</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main body of the chat application -->
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="well" ng-controller="MessageScrollController as messageScroll" ng-cloak>
+                    <div ng-if="messageScroll.messages.length <= 1 && messageScroll.showFallback === true">
+                        <div class="alert alert-danger" role="alert" ng-click="messageScroll.fallbackEnable()">Messages not loading? Click here to try a different way.</div>
+                    </div>
+                    <div class="panel panel-default" ng-repeat="message in messageScroll.messages | orderBy: message.messageID">
+                        <div class="panel-heading">
+                            <div class="dropdown">
+                                <div class="btn-group btn-group-xs" role="group" uib-dropdown auto-close="outsideClick">
+                                    <button class="btn btn-default dropdown-toggle" type="button" style="color: white" id="messageDropdownMenu{{$index}}" data-toggle="dropdown"
+                                        uib-dropdown-toggle>
+                                        <span ng-bind="messageScroll.displayName(message.poster)"></span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
+                                        <li>
+                                            <button type="button" class="btn btn-default" ng-if="messageScroll.userservice.user.userID !== message.poster" ng-click="messageScroll.mention(message)">Mention</button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="btn btn-default" ng-click="messageScroll.quote(message)">Quote</button>
+                                        </li>
+                                        <li role="separator" class="divider" ng-if="messageScroll.userservice.user.isAdmin && messageScroll.userservice.user.userID !== message.poster"></li>
+                                        <li>
+                                            <button type="button" class="btn btn-default" ng-if="messageScroll.userservice.user.isAdmin && messageScroll.userservice.user.userID !== message.poster"
+                                                ng-click="messageScroll.ban(message)">Ban</button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="btn btn-default" ng-if="messageScroll.userservice.user.isAdmin && messageScroll.userservice.user.userID !== message.poster"
+                                                ng-click="messageScroll.suspend(message)">Suspend</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row row-eq-height">
+                                <div class="col-xs-11 cc-message-area">
+                                    <div class="cc-message-content" ng-class="{'cc-message-mention': message.mentions.indexOf(messageScroll.userservice.user.userID) !== -1}"
+                                        ng-bind-html="message.content"></div>
+                                </div>
+                                <div class="col-xs-1 cc-message-votes">
+                                    <span class="glyphicon glyphicon-chevron-up cc-vote" ng-class="{'cc-blue': message.reaction === 1}" ng-click="messageScroll.like(message)"></span>
+                                    <br>
+                                    <span ng-bind="message.net_likes"></span>
+                                    <br>
+                                    <span class="glyphicon glyphicon-chevron-down cc-vote" ng-class="{'cc-red': message.reaction === -1}" ng-click="messageScroll.dislike(message)"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer" ng-if="messageScroll.userservice.user.userID === message.poster || messageScroll.userservice.user.isAdmin">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-default" ng-if="messageScroll.userservice.user.userID === message.poster" ng-click="messageScroll.edit(message)">Edit</button>
+                                <button type="button" class="btn btn-default" ng-click="messageScroll.remove(message)">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav id="cc-messageBox" class="navbar navbar-inverse navbar-fixed-bottom cc-messagebox" ng-controller="MessageBoxController as messageBox">
+        <div class="container">
+            <div class="row row-eq-height">
+                <div class="col-xs-2 cc-messagebox-mentions" ng-hide="messageBox.mentions.length === 0" ng-cloak>
+                    <div class="btn-group dropup" uib-dropdown auto-close="outsideClick" ng-hide="messageBox.mentions.length === 0" ng-cloak>
+                        <button id="mentions-dropdown" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                            Mentions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+                            <li role="menuitem" ng-repeat="mention in messageBox.mentions">
+                                <button type="button" class="btn btn-default" ng-click="messageBox.removeMention(mention)">
+                                    <span ng-bind="messageBox.displayName(mention)"></span>
+                                    <span>&times;</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div ng-class="{'col-xs-12' : messageBox.mentions.length === 0, 'col-xs-10': messageBox.mentions.length !== 0}">
+                    <form class="navbar-form" ng-submit="messageBox.post()">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <textarea class="form-control" placeholder="Type message here..." autocomplete="off" autofocus="autofocus" ng-model="messageBox.messageContent"
+                                    auto-grow ng-maxlength="10000" ng-keydown="messageBox.shiftEnter($event)"></textarea>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit">
+                                        <span class="glyphicon glyphicon-send"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- General Modal -->
+    <script type="text/ng-template" id="generalModal.html">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="modal.cancel()">&times;</button>
+            <h4 class="modal-title" ng-bind="modal.modalParams.title"></h4>
+        </div>
+        <div class="modal-body">
+            <p ng-bind="modal.modalParams.content"></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="modal.ok()">OK</button>
+        </div>
+    </script>
+
+    <!-- Confirm Modal -->
+    <script type="text/ng-template" id="confirmModal.html">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="modal.cancel()">&times;</button>
+            <h4 class="modal-title" ng-bind="modal.modalParams.title"></h4>
+        </div>
+        <div class="modal-body">
+            <p ng-bind="modal.modalParams.content"></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="modal.cancel()">Cancel</button>
+            <button type="button" class="btn btn-default" ng-click="modal.ok()">OK</button>
+        </div>
+    </script>
+
+    <!-- Reset Password Modal -->
+    <script type="text/ng-template" id="resetPasswordModal.html">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="modal.cancel()">&times;</button>
+            <h4 class="modal-title">Reset Password</h4>
+        </div>
+        <div class="modal-body">
+            <div class="input-group">
+                <input type="password" class="form-control" placeholder="Enter new password" ng-model="modal.response.password">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="modal.ok()">OK</button>
+        </div>
+    </script>
+
+    <!-- Suspend Modal -->
+    <script type="text/ng-template" id="suspendModal.html">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">How long will user be suspended?</h4>
+        </div>
+
+        <div class="modal-body">
+            <form>
+                Date:
+                <input type="date" name="suspend" ng-model="modal.response.date">
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="modal.cancel()">Cancel</button>
+            <button type="button" class="btn btn-default" ng-click="modal.ok()">OK</button>
+        </div>
+    </script>
+
+    <div ng-controller="ResetPasswordController as reset"></div>
+
+    <!-- Vendor JavaScript for base-->
+    <script src="js/vendor/jQuery.min.js"></script>
+    <script src="js/vendor/angular.js"></script>
+    <script src="js/vendor/angular-resource.js"></script>
+    <script src="js/vendor/angular-animate.js"></script>
+    <script src="js/vendor/angular-sanitize.min.js"></script>
+    <script src="js/vendor/ui-bootstrap-tpls-2.5.0.js"></script>
+
+    <!-- ChitChat components-->
+
+    <!-- Core module, controllers, and services -->
+    <script src="js/core/core.module.js"></script>
+    <script src="js/core/modal.service.js"></script>
+    <script src="js/core/modalInstance.controller.js"></script>
+
+    <!-- User module, controllers, and services -->
+    <script src="js/user/users.module.js"></script>
+    <script src="js/user/user.factory.js"></script>
+    <script src="js/user/user.service.js"></script>
+
+    <!-- Message module, controllers, and services -->
+    <script src="js/message/messages.module.js"></script>
+    <script src="js/message/message.factory.js"></script>
+    <script src="js/message/message.service.js"></script>
+
+    <!-- Main module, controllers, and services -->
+    <script src="js/app.module.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/nav.controller.js"></script>
+    <script src="js/messageScroll.controller.js"></script>
+    <script src="js/messageBox.controller.js"></script>
+    <script src="js/resetPassword.controller.js"></script>
+
+</body>
+
+</html>
