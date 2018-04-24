@@ -50,7 +50,7 @@
             else { // Server-Side Event
                 vm.source = messageservice.loadStream();
                 vm.source.onmessage = function (event) {
-                    $scope.$apply(function () {
+                    $scope.$applyAsync(function () {
                         var response = angular.fromJson(event.data);
                         if (response.success == true) {
                             updateMessageArray(response);

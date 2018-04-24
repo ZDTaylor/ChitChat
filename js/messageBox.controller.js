@@ -128,7 +128,7 @@
                     var height = element[0].scrollHeight;
 
                     var parentHeight = parseFloat(angular.element(window).height());
-                    var messageBoxPercent = parseFloat(messageBox.css("max-height")) / 100.0;
+                    var messageBoxPercent = 0.25;
 
                     var maxHeight = Math.floor((parentHeight * messageBoxPercent) - 16);
 
