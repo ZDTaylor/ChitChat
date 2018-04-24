@@ -35,7 +35,7 @@
         function load() {
             if (typeof (EventSource) === "undefined" || vm.fallback === true) { //Polling
                 if (typeof (vm.source) !== "undefined") {
-                    vm.source.target.close();
+                    vm.source.close();
                 }
                 $interval(function () {
                     messageservice.load()
