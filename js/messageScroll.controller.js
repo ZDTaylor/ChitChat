@@ -164,9 +164,9 @@
             var j = 0;
             for (var i = 0; i < response.messages.length; i++) {
 
-                // in vm but not messageservice -> delete
+                // in vm but not response -> delete
                 // in both -> update
-                // in messageservice but not bm -> add
+                // in response but not bm -> add
                 if (j < vm.messages.length && response.messages[i].messageID === vm.messages[j].messageID) {
                     vm.messages[j].content = response.messages[i].content;
                     vm.messages[j].mentions = response.messages[i].mentions;

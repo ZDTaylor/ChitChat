@@ -9,7 +9,7 @@
     MessageBoxController.inject = ['$scope', 'userservice', 'messageservice', 'Message', 'modalservice'];
     function MessageBoxController($scope, userservice, messageservice, Message, modalservice) {
         var vm = this;
-        vm.message = new Message({ poster: userservice.user.userId });
+        vm.message = new Message({ poster: userservice.user.userID });
         vm.messageContent = "";
         vm.mentions = [];
         vm.editing = false;
@@ -27,7 +27,7 @@
         ////////////////
 
         function post() {
-            vm.message.poster = userservice.user.userId;
+            vm.message.poster = userservice.user.userID;
             vm.message.content = vm.messageContent;
             vm.message.mentions = vm.mentions;
             if (vm.editing === true) {
@@ -40,11 +40,16 @@
                                 vm.mentions = [];
                                 vm.message.messageID = response.messageID;
                                 messageservice.messages.push(vm.message);
-                                vm.message = new Message(poster = userservice.user.userID);
+                                vm.message = new Message({ poster: userservice.user.userID });
                                 messageservice.load();
                             }
                             else {
-                                modalservice.openGeneralModal('Error', 'Please check your message and try again.');
+                                if (userservice.user.userID == null) {
+                                    modalservice.openGeneralModal('Error', 'Please log in and try again.');
+                                }
+                                else {
+                                    modalservice.openGeneralModal('Error', 'Please check your message and try again.');
+                                }
                             }
                         })
                     .catch(
@@ -62,7 +67,7 @@
                                 vm.mentions = [];
                                 vm.message.messageID = response.messageID;
                                 messageservice.messages.push(vm.message);
-                                vm.message = new Message(poster = userservice.user.userID);
+                                vm.message = new Message({ poster: userservice.user.userID });
                                 messageservice.load();
                             }
                             else {
