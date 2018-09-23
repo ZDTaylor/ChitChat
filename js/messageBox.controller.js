@@ -19,6 +19,7 @@
         vm.edit = edit;
         vm.shiftEnter = shiftEnter;
         vm.removeMention = removeMention;
+        vm.scroll = scroll;
         vm.displayName = userservice.displayName;
 
         $scope.$on("quoteMessage", vm.quote);
@@ -113,6 +114,11 @@
             if (index !== -1) {
                 vm.mentions.splice(index, 1);
             }
+        }
+
+        function scroll() {
+            var body = document.body;
+            body.scrollTop = body.scrollHeight;
         }
     }
     //https://gist.github.com/enapupe/2a59589168f33ca405d0

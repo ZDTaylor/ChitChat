@@ -4,7 +4,18 @@
     require_once "lib/UserManager.php";
     require_once "lib/sanitize_input.php";
     header('Content-Type: text/event-stream'); // specific sse mimetype
-    header('Cache-Control: no-cache'); // no cache
+    header('Cache-Control: no-cache'); // no cacheheader('X-Accel-Buffering: no');
+    header('X-Accel-Buffering: no');
+
+    // function disable_gzip() {
+    //     @ini_set('zlib.output_compression', 'Off');
+    //     @ini_set('output_buffering', 'Off');
+    //     @ini_set('output_handler', '');
+    //     @apache_setenv('no-gzip', 1);
+    // }
+
+    // disable_gzip();
+    ob_end_clean();
 
     set_time_limit(0);
 
@@ -14,10 +25,9 @@
         "success" => false,
         "messages" => []
     ];
-
+    session_start();
     $old_messages = [];
     while(!connection_aborted()) {
-        session_start();
         if(isset($_SESSION["user"])) {
             $_SESSION["user"] = $userManager->checkBannedSuspended($_SESSION["user"]);
             if ($_SESSION["user"]->banned || new DateTime() < $_SESSION["user"]->suspended) {
@@ -63,6 +73,7 @@
             echo PHP_EOL;
 
         }
+        ob_end_flush();
         ob_flush(); // clear memory
         flush(); // clear memory
         sleep(5);// seconds

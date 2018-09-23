@@ -11,6 +11,8 @@ Bootstrap overrides/fixes
 body {
     padding-top: 52px;
     padding-bottom: 50px;
+    overflow-y: auto;
+    height: 100%;
 }
 
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
@@ -25,6 +27,9 @@ ChitChat styling
 
 html {
     overflow-x: hidden;
+    position: relative;
+    height: 100vh;
+    overflow-y: hidden;
 }
 
 
@@ -180,4 +185,11 @@ html {
 
 .cc-red {
     color: red !important;
+}
+
+.cc-messagebox-scroll {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-content: center;
 }

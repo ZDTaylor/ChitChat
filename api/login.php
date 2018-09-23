@@ -21,7 +21,7 @@
         $suspended = clone $_SESSION["user"]->suspended;
         $suspended = $suspended->format('U').'000';
         $response["user"] = clone $_SESSION["user"];
-        $response["user"]->suspended = intval(suspended);
+        $response["user"]->suspended = intval($suspended);
         $response["success"] = true;
     }
     // login.php needs to be accessed as a POST only

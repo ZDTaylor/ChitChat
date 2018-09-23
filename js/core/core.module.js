@@ -4,6 +4,7 @@
     angular.module('app.core', [
         'ngAnimate',
         'ngSanitize',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'luegg.directives'
     ]);
 })();
