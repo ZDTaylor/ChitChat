@@ -288,7 +288,7 @@ class UserManager {
 
         $mail->Body    = "
 Please visit the following link to reset your password:
-http://pluto.cse.msstate.edu/~dcsp03/ChitChat?resetkey=$resetUrl
+http://www.chit-chat.net?resetkey=$resetUrl
 
 If you did not initiate this reset, you can ignore this message.
 
