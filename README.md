@@ -1,5 +1,7 @@
 # Chit Chat
 
+### Due to my AWS Free Tier expiring, this site will no longer be hosted. The code will remain for you to browse.
+
 ---
 
 This site is provided as a demo and for inspirational/educational purposes.  **DO NOT** use any of your normal log in credentials on this site.
